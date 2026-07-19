@@ -445,16 +445,17 @@
     <div class="auth-card reveal in">
       <h1>Log in</h1>
       <p class="sub">Access your support tickets</p>
-      <form onsubmit="return false;">
+      <form id="loginForm">
         <div class="field">
           <label for="email">Email</label>
-          <input type="email" id="email" placeholder="name@company.com">
+          <input type="email" id="email" placeholder="name@company.com" required>
         </div>
         <div class="field">
           <label for="password">Password</label>
-          <input type="password" id="password" placeholder="••••••••">
+          <input type="password" id="password" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn btn-primary auth-submit">Log in</button>
+        <div id="loginMessage" style="display:none;font-size:13px;color:var(--pink-soft);margin-bottom:14px;"></div>
+        <button type="submit" class="btn btn-primary auth-submit" id="loginBtn">Log in</button>
       </form>
       <div class="auth-links">
         <a href="#">Forgot password?</a>
@@ -524,6 +525,32 @@
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
   }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-client.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = document.getElementById('loginBtn');
+    var msg = document.getElementById('loginMessage');
+    msg.style.display = 'none';
+    btn.textContent = 'Logging in...';
+    btn.disabled = true;
+
+    var result = await auwionLogIn({
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value
+    });
+
+    if (result.ok) {
+      window.location.href = 'portal.html';
+    } else {
+      msg.textContent = result.message || 'Something went wrong. Please try again.';
+      msg.style.display = 'block';
+      btn.textContent = 'Log in';
+      btn.disabled = false;
+    }
+  });
 </script>
 </body>
 </html>

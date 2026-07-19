@@ -445,27 +445,25 @@
     <div class="wrap">
       <div class="dash-header reveal in">
         <span class="wordmark" style="font-size:15px;">Dashboard</span>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:14px;color:var(--text-soft);">Jane Smith</span>
-          <div class="avatar">JS</div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="font-size:14px;color:var(--text-soft);" id="userEmail">Loading...</span>
+          <div class="avatar" id="userAvatar">··</div>
+          <button class="btn btn-ghost" id="logoutBtn" style="padding:8px 16px;font-size:13px;">Log out</button>
         </div>
       </div>
 
-      <div class="stat-row reveal in">
-        <div class="stat-card"><div class="num">3</div><div class="label">OPEN TICKETS</div></div>
-        <div class="stat-card"><div class="num">2</div><div class="label">IN PROGRESS</div></div>
-        <div class="stat-card"><div class="num">14</div><div class="label">RESOLVED</div></div>
-      </div>
+      <div id="portalContent">
+        <div class="stat-row reveal in">
+          <div class="stat-card"><div class="num" id="statOpen">–</div><div class="label">OPEN TICKETS</div></div>
+          <div class="stat-card"><div class="num" id="statProgress">–</div><div class="label">IN PROGRESS</div></div>
+          <div class="stat-card"><div class="num" id="statResolved">–</div><div class="label">RESOLVED</div></div>
+        </div>
 
-      <p class="section-sub" style="margin-bottom:16px;">Your tickets are created and updated by the Auwion team — this view is read-only.</p>
+        <p class="section-sub" style="margin-bottom:16px;">Your tickets are created and updated by the Auwion team — this view is read-only.</p>
 
-      <div class="table-wrap reveal in">
-        <table>
-          <tr><th>Ticket</th><th>Platform</th><th>Status</th><th>Updated</th></tr>
-          <tr><td>Invoice sync error</td><td>Business Central</td><td><span class="status progress">In progress</span></td><td>2h ago</td></tr>
-          <tr><td>Add new user role</td><td>Odoo</td><td><span class="status open">Open</span></td><td>1d ago</td></tr>
-          <tr><td>Monthly reconciliation</td><td>Book keeping</td><td><span class="status resolved">Resolved</span></td><td>4d ago</td></tr>
-        </table>
+        <div id="ticketArea">
+          <div class="empty-note">Loading your tickets...</div>
+        </div>
       </div>
     </div>
   </section>
@@ -531,6 +529,55 @@
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
   }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-client.js"></script>
+<script>
+  (async function initPortal(){
+    const { data: sessionData } = await supabase.auth.getSession();
+    const session = sessionData?.session;
+    if (!session) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const email = session.user.email || '';
+    document.getElementById('userEmail').textContent = email;
+    document.getElementById('userAvatar').textContent = email.slice(0,2).toUpperCase();
+
+    document.getElementById('logoutBtn').addEventListener('click', async function(){
+      await auwionLogOut();
+      window.location.href = 'login.html';
+    });
+
+    const ticketArea = document.getElementById('ticketArea');
+    const result = await auwionGetTickets();
+
+    if (!result.ok) {
+      ticketArea.innerHTML = '<div class="empty-note">We couldn\'t load your tickets right now. The ticket connection may still be getting set up — check back soon, or contact us if this continues.</div>';
+      return;
+    }
+
+    if (result.tickets.status === 'unmatched' || (result.tickets.tickets || []).length === 0) {
+      document.getElementById('statOpen').textContent = '0';
+      document.getElementById('statProgress').textContent = '0';
+      document.getElementById('statResolved').textContent = '0';
+      ticketArea.innerHTML = '<div class="empty-note">No tickets yet. When you or our team opens a support ticket, it\'ll show up here.</div>';
+      return;
+    }
+
+    const tickets = result.tickets.tickets;
+    const statusClass = { 'Open':'open', 'In progress':'progress', 'Resolved':'resolved' };
+    document.getElementById('statOpen').textContent = tickets.filter(t => t.status === 'Open').length;
+    document.getElementById('statProgress').textContent = tickets.filter(t => t.status === 'In progress').length;
+    document.getElementById('statResolved').textContent = tickets.filter(t => t.status === 'Resolved').length;
+
+    let rows = '<tr><th>Ticket</th><th>Platform</th><th>Status</th><th>Updated</th></tr>';
+    tickets.forEach(function(t){
+      rows += '<tr><td>'+t.name+'</td><td>'+t.platform+'</td><td><span class="status '+(statusClass[t.status]||'open')+'">'+t.status+'</span></td><td>'+t.updated+'</td></tr>';
+    });
+    ticketArea.innerHTML = '<div class="table-wrap reveal in"><table>'+rows+'</table></div>';
+  })();
 </script>
 </body>
 </html>

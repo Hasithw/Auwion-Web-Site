@@ -445,30 +445,31 @@
     <div class="auth-card reveal in">
       <h1>Create account</h1>
       <p class="sub">Self-serve signup — takes less than a minute</p>
-      <form onsubmit="return false;">
+      <form id="signupForm">
         <div class="field">
           <label for="name">Full name</label>
-          <input type="text" id="name" placeholder="Jane Smith">
+          <input type="text" id="name" placeholder="Jane Smith" required>
         </div>
         <div class="field">
           <label for="company">Company name</label>
-          <input type="text" id="company" placeholder="Your company">
+          <input type="text" id="company" placeholder="Your company" required>
           <div class="hint">We use this to match your account to your existing tickets.</div>
         </div>
         <div class="field">
           <label for="semail">Email</label>
-          <input type="email" id="semail" placeholder="name@company.com">
+          <input type="email" id="semail" placeholder="name@company.com" required>
         </div>
         <div class="field">
           <label for="spassword">Password</label>
-          <input type="password" id="spassword" placeholder="••••••••">
+          <input type="password" id="spassword" placeholder="••••••••" required minlength="6">
         </div>
-        <button type="submit" class="btn btn-primary auth-submit">Sign up</button>
+        <div id="signupMessage" style="display:none;font-size:13px;color:var(--pink-soft);margin-bottom:14px;"></div>
+        <button type="submit" class="btn btn-primary auth-submit" id="signupBtn">Sign up</button>
       </form>
-      <div class="auth-links" style="justify-content:center;">
+      <div class="auth-links" style="justify-content:center;" id="loginLinkRow">
         <a href="login.html">Already have an account? Log in</a>
       </div>
-      <div class="auth-note">
+      <div class="auth-note" id="signupNote">
         We'll send a verification email after you sign up.<br>
         <strong style="color:var(--text-soft);">Couldn't match your account automatically?</strong> No problem — our team will verify it manually and get you access within 1 business day.
       </div>
@@ -536,6 +537,37 @@
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
   }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-client.js"></script>
+<script>
+  document.getElementById('signupForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = document.getElementById('signupBtn');
+    var msg = document.getElementById('signupMessage');
+    msg.style.display = 'none';
+    btn.textContent = 'Creating account...';
+    btn.disabled = true;
+
+    var result = await auwionSignUp({
+      fullName: document.getElementById('name').value,
+      companyName: document.getElementById('company').value,
+      email: document.getElementById('semail').value,
+      password: document.getElementById('spassword').value
+    });
+
+    if (result.ok) {
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('loginLinkRow').style.display = 'none';
+      document.getElementById('signupNote').innerHTML =
+        '<strong style="color:var(--teal-soft);">Check your email</strong><br>We\'ve sent a verification link to confirm your account. Once verified, you can <a href="login.html" style="color:var(--teal-soft);">log in here</a>.';
+    } else {
+      msg.textContent = result.message || 'Something went wrong. Please try again.';
+      msg.style.display = 'block';
+      btn.textContent = 'Sign up';
+      btn.disabled = false;
+    }
+  });
 </script>
 </body>
 </html>

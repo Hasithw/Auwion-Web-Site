@@ -7,8 +7,8 @@
 // 5. Create a `profiles` table (see /supabase/README.md for the SQL) to
 //    store the link between a signed-up user and their Odoo client record
 
-const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL"; // e.g. https://xxxxx.supabase.co
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://ecrokcjkcchxjvesqmtb.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjcm9rY2prY2NoeGp2ZXNxbXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzYwNjQsImV4cCI6MjEwMDA1MjA2NH0.mTwwI6FiGTR_FDR2oPodb5Xdu2xl_ok7EtkY9pooo1E";
 
 // Loaded via CDN script tag in login.html / signup.html:
 // <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
