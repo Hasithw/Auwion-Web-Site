@@ -462,7 +462,7 @@
         </div>
         <div class="form-card reveal in" id="contact">
           <h3 style="font-family:var(--font-display);font-size:18px;margin:0 0 18px;">Get in touch</h3>
-          <form onsubmit="return false;">
+          <form id="contactForm" onsubmit="return false;">
             <div class="field"><label for="cname">Name</label><input type="text" id="cname" placeholder="Your name"></div>
             <div class="field"><label for="cemail">Email</label><input type="email" id="cemail" placeholder="name@company.com"></div>
             <div class="field"><label for="ccompany">Company</label><input type="text" id="ccompany" placeholder="Company name"></div>
@@ -478,7 +478,8 @@
               </select>
             </div>
             <div class="field"><label for="cmessage">Message</label><textarea id="cmessage" placeholder="Tell us what you're working with"></textarea></div>
-            <button type="submit" class="btn btn-primary auth-submit">Send message</button>
+            <div id="contactMessage" style="display:none;font-size:13px;margin-bottom:12px;"></div>
+            <button type="submit" id="contactBtn" class="btn btn-primary auth-submit">Send message</button>
           </form>
         </div>
       </div>
@@ -546,6 +547,52 @@
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
   }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-client.js"></script>
+<script>
+  document.getElementById('contactForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = document.getElementById('contactBtn');
+    var msg = document.getElementById('contactMessage');
+    var name = document.getElementById('cname').value.trim();
+    var email = document.getElementById('cemail').value.trim();
+
+    msg.style.display = 'none';
+
+    if (!name || !email) {
+      msg.textContent = 'Please fill in your name and email.';
+      msg.style.color = 'var(--pink)';
+      msg.style.display = 'block';
+      return;
+    }
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    var result = await auwionSendMessage({
+      fullName: name,
+      email: email,
+      companyName: document.getElementById('ccompany').value.trim(),
+      interestedIn: document.getElementById('cinterest').value,
+      message: document.getElementById('cmessage').value.trim()
+    });
+
+    if (result.ok) {
+      document.getElementById('contactForm').reset();
+      msg.textContent = "Thanks — we've got your message and will be in touch soon.";
+      msg.style.color = 'var(--teal-soft)';
+      msg.style.display = 'block';
+      btn.textContent = 'Send message';
+      btn.disabled = false;
+    } else {
+      msg.textContent = result.message || 'Something went wrong. Please try again.';
+      msg.style.color = 'var(--pink)';
+      msg.style.display = 'block';
+      btn.textContent = 'Send message';
+      btn.disabled = false;
+    }
+  });
 </script>
 </body>
 </html>
