@@ -570,25 +570,30 @@
     btn.textContent = 'Sending...';
     btn.disabled = true;
 
-    var result = await auwionSendMessage({
-      fullName: name,
-      email: email,
-      companyName: document.getElementById('ccompany').value.trim(),
-      interestedIn: document.getElementById('cinterest').value,
-      message: document.getElementById('cmessage').value.trim()
-    });
+    try {
+      var result = await auwionSendMessage({
+        fullName: name,
+        email: email,
+        companyName: document.getElementById('ccompany').value.trim(),
+        interestedIn: document.getElementById('cinterest').value,
+        message: document.getElementById('cmessage').value.trim()
+      });
 
-    if (result.ok) {
-      document.getElementById('contactForm').reset();
-      msg.textContent = "Thanks — we've got your message and will be in touch soon.";
-      msg.style.color = 'var(--teal-soft)';
-      msg.style.display = 'block';
-      btn.textContent = 'Send message';
-      btn.disabled = false;
-    } else {
-      msg.textContent = result.message || 'Something went wrong. Please try again.';
+      if (result.ok) {
+        document.getElementById('contactForm').reset();
+        msg.textContent = "Thanks — we've got your message and will be in touch soon.";
+        msg.style.color = 'var(--teal-soft)';
+        msg.style.display = 'block';
+      } else {
+        msg.textContent = result.message || 'Something went wrong. Please try again.';
+        msg.style.color = 'var(--pink)';
+        msg.style.display = 'block';
+      }
+    } catch (err) {
+      msg.textContent = 'Something went wrong. Please try again.';
       msg.style.color = 'var(--pink)';
       msg.style.display = 'block';
+    } finally {
       btn.textContent = 'Send message';
       btn.disabled = false;
     }
