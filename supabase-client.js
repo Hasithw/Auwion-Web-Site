@@ -53,16 +53,20 @@ async function auwionLogIn({ email, password }) {
 // can only insert (see /supabase/contact_messages.sql) — messages are read
 // back from the Supabase dashboard, not the site itself.
 async function auwionSendMessage({ fullName, email, companyName, interestedIn, message }) {
-  const { error } = await supabase.from("contact_messages").insert({
-    full_name: fullName,
-    email,
-    company_name: companyName,
-    interested_in: interestedIn,
-    message,
-  });
+  try {
+    const { error } = await supabase.from("contact_messages").insert({
+      full_name: fullName,
+      email,
+      company_name: companyName,
+      interested_in: interestedIn,
+      message,
+    });
 
-  if (error) return { ok: false, message: error.message };
-  return { ok: true };
+    if (error) return { ok: false, message: error.message };
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, message: (err && err.message) || "Network error. Please try again." };
+  }
 }
 
 // ---------- Log out ----------
