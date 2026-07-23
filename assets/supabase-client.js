@@ -55,6 +55,20 @@ async function auwionLogIn({ email, password }) {
   return { ok: true };
 }
 
+// ---------- Password reset ----------
+// Sends a password reset email via Supabase Auth. The user clicks the link
+// in that email, which lands them on reset-password.html to set a new one.
+async function auwionResetPassword({ email }) {
+  try {
+    const redirectTo = window.location.origin + "/reset-password.html";
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) return { ok: false, message: error.message };
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, message: (err && err.message) || "Something went wrong. Please try again." };
+  }
+}
+
 // ---------- Contact form ----------
 // Called from about.html. Writes a row to `contact_messages`. The anon key
 // can only insert (see /supabase/contact_messages.sql) — messages are read
@@ -73,6 +87,19 @@ async function auwionSendMessage({ fullName, email, companyName, interestedIn, m
     return { ok: true };
   } catch (err) {
     return { ok: false, message: (err && err.message) || "Network error. Please try again." };
+  }
+}
+
+// ---------- Set new password (from reset-password.html) ----------
+// Called after the user arrives via the password reset email link, which
+// Supabase uses to establish a temporary authenticated session.
+async function auwionUpdatePassword({ newPassword }) {
+  try {
+    const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+    if (error) return { ok: false, message: error.message };
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, message: (err && err.message) || "Something went wrong. Please try again." };
   }
 }
 
