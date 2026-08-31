@@ -14,14 +14,14 @@
 <style>
 
   :root{
-    --bg:#F6F8FC;
+    --bg:#FFFFFF;
     --bg-2:#FFFFFF;
     --bg-3:#EDF1F9;
     --card:rgba(16,20,43,0.04);
     --card-strong:rgba(16,20,43,0.07);
     --border:rgba(16,20,43,0.12);
     --border-soft:rgba(16,20,43,0.07);
-    --pink:#3B82F6;
+    --pink:#15024C;
     --pink-soft:#7CB4FA;
     --teal:#0FA898;
     --teal-soft:#45C9BB;
@@ -78,7 +78,7 @@
     border:1px solid transparent;transition:transform .15s ease, opacity .15s ease, background .15s ease, border-color .15s ease;
   }
   .btn:hover{transform:translateY(-1px);}
-  .btn-primary{background:var(--grad);color:#0A0820;}
+  .btn-primary{background:var(--grad);color:#fff;}
   .btn-primary:hover{opacity:0.9;}
   .btn-ghost{border-color:var(--border);color:var(--text);}
   .btn-ghost:hover{background:var(--card-strong);border-color:var(--teal);}
@@ -113,7 +113,7 @@
     padding:110px 0 88px;
     overflow:hidden;
     background:
-      radial-gradient(ellipse 700px 420px at 18% 10%, rgba(59,130,246,0.18), transparent 60%),
+      radial-gradient(ellipse 700px 420px at 18% 10%, rgba(21,2,76,0.18), transparent 60%),
       radial-gradient(ellipse 600px 500px at 85% 20%, rgba(15,168,152,0.14), transparent 60%),
       linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
   }
@@ -163,7 +163,7 @@
   .ledger-col.credit li::before{content:"+";color:var(--teal-soft);font-family:var(--font-mono);}
   .ledger-foot{
     display:flex;align-items:center;justify-content:space-between;
-    padding:16px 26px;background:var(--grad);color:#0A0820;
+    padding:16px 26px;background:var(--grad);color:#fff;
     font-family:var(--font-mono);font-size:13px;letter-spacing:.04em;font-weight:500;
   }
   .ledger-foot .balance{display:flex;align-items:center;gap:8px;}
@@ -239,10 +239,10 @@
 
   /* ---------- CTA band ---------- */
   .cta-band{
-    background:var(--grad);color:#0A0820;border-radius:20px;padding:56px 40px;text-align:center;margin:0 auto;
+    background:var(--grad);color:#fff;border-radius:20px;padding:56px 40px;text-align:center;margin:0 auto;
   }
   .cta-band h2{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.2vw,32px);margin:0 0 12px;}
-  .cta-band p{margin:0 0 28px;color:rgba(10,8,32,0.75);font-size:16px;}
+  .cta-band p{margin:0 0 28px;color:rgba(255,255,255,0.85);font-size:16px;}
 
   /* ---------- Footer ---------- */
   footer{border-top:1px solid var(--border-soft);padding:60px 0 30px;background:var(--bg-2);}
@@ -384,7 +384,7 @@
     font-size:13px;padding:8px 16px;border-radius:100px;border:1px solid var(--border);
     color:var(--text-soft);text-decoration:none;
   }
-  .filter-pill.active{background:var(--grad);color:#0A0820;border-color:transparent;font-weight:600;}
+  .filter-pill.active{background:var(--grad);color:#fff;border-color:transparent;font-weight:600;}
   .filter-pill:hover{border-color:var(--teal);}
 
   .article-full{max-width:680px;margin:0 auto;}
@@ -425,7 +425,7 @@
 
 </style>
 </head>
-<body>
+<body data-cms-page="about">
 
 <header class="site">
   <div class="wrap nav">
@@ -455,14 +455,14 @@
   <section style="padding-top:60px;">
     <div class="wrap">
       <div class="section-head reveal in">
-        <div class="eyebrow">About</div>
-        <h1 class="section-title" style="font-size:clamp(30px,4vw,44px);">About Auwion</h1>
+        <div class="eyebrow" id="cms-eyebrow">About</div>
+        <h1 class="section-title" style="font-size:clamp(30px,4vw,44px);" id="cms-headline">About Auwion</h1>
       </div>
       <div class="contact-grid">
         <div class="about-copy reveal in">
-          <p>We started Auwion in 2020 with a simple idea: proper ERP implementation shouldn't cost a fortune. Six years and 20+ Business Central projects later, that's still what drives us — fair, honest pricing without cutting corners on the work.</p>
-          <p>Our team is built around real Business Central expertise: certified Business Central consultants and developers, backed by hands-on experience across concrete batching, plastic bag manufacturing, fashion, banking, and education. That range means we've usually seen a business like yours before.</p>
-          <p>What clients tell us keeps them coming back is simple — we're responsive, we tailor support instead of running a script, and we know how to make Business Central, Zoho Books, and Odoo actually talk to the rest of your systems.</p>
+          <p id="cms-para-1">We started Auwion in 2020 with a simple idea: proper ERP implementation shouldn't cost a fortune. Six years and 20+ Business Central projects later, that's still what drives us — fair, honest pricing without cutting corners on the work.</p>
+          <p id="cms-para-2">Our team is built around real Business Central expertise: certified Business Central consultants and developers, backed by hands-on experience across concrete batching, plastic bag manufacturing, fashion, banking, and education. That range means we've usually seen a business like yours before.</p>
+          <p id="cms-para-3">What clients tell us keeps them coming back is simple — we're responsive, we tailor support instead of running a script, and we know how to make Business Central, Zoho Books, and Odoo actually talk to the rest of your systems.</p>
           <div class="badge-row" style="margin-top:28px;">
             <span class="badge"><span class="dot"></span><a href="tel:+94711222528" style="color:inherit;text-decoration:none;">+94 71 122 2528</a></span>
             <span class="badge"><span class="dot"></span><a href="mailto:hasith@auwion.com" style="color:inherit;text-decoration:none;">hasith@auwion.com</a></span>
@@ -616,5 +616,11 @@
     }
   });
 </script>
+<!-- CMS content loader: fills in admin-edited text if a published version
+     exists in Supabase; otherwise the hand-written content above stands
+     unchanged. See assets/site-cms.js. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/site-cms.js"></script>
+
 </body>
 </html>
