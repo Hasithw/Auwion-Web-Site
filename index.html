@@ -251,6 +251,51 @@
   }
   .why-card p{margin:0;font-size:16.5px;color:rgba(255,255,255,0.78);}
 
+  /* ---------- Industries ---------- */
+  .industries{
+    position:relative;
+    overflow:hidden;
+    border-top:1px solid rgba(255,255,255,0.08);
+    background:
+      radial-gradient(900px 480px at 88% 0%, rgba(15,168,152,0.20), transparent 60%),
+      radial-gradient(800px 460px at 8% 100%, rgba(109,74,235,0.16), transparent 55%),
+      linear-gradient(165deg, #0A0729 0%, #15024C 52%, #0A0729 100%);
+  }
+  .industries-lines{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0.5;}
+  .industries .wrap{position:relative;z-index:2;}
+  .industries .eyebrow{color:#fff;}
+  .industries .eyebrow::before{background:var(--teal);}
+  .industries h2.section-title{color:#fff;}
+  .industries .section-sub{color:rgba(255,255,255,0.68);max-width:70ch;}
+  .industries-grid{
+    display:grid;grid-template-columns:1fr;gap:16px;
+  }
+  @media(min-width:700px){.industries-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(min-width:960px){.industries-grid{grid-template-columns:repeat(3,1fr);}}
+  .industry-card{
+    display:flex;flex-direction:column;align-items:flex-start;gap:12px;
+    background:linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:14px;padding:24px 22px;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .industry-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--teal);
+    box-shadow:0 16px 34px rgba(15,168,152,0.22);
+  }
+  .industry-icon{
+    width:42px;height:42px;flex:none;
+    border-radius:11px;
+    background:rgba(15,168,152,0.14);
+    border:1.5px solid var(--teal);
+    transform:rotate(45deg);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .industry-icon svg{width:18px;height:18px;transform:rotate(-45deg);stroke:var(--teal-soft);}
+  .industry-card h3{margin:0;font-size:17px;font-weight:600;color:#fff;line-height:1.3;font-family:var(--font-display);}
+  .industry-card p{margin:0;font-size:14.5px;line-height:1.55;color:rgba(255,255,255,0.68);}
+
   /* ---------- Articles ---------- */
   .article-grid{display:grid;grid-template-columns:1fr;gap:22px;}
   @media(min-width:700px){.article-grid{grid-template-columns:repeat(3,1fr);}}
@@ -454,61 +499,99 @@
     </div>
   </section>
 
-  <!-- WHY -->
-  <section class="why">
-    <svg class="why-lines" viewBox="0 0 1120 460" preserveAspectRatio="none" aria-hidden="true">
+  <!-- INDUSTRIES -->
+  <section class="industries">
+    <svg class="industries-lines" viewBox="0 0 1120 460" preserveAspectRatio="none" aria-hidden="true">
       <defs>
-        <linearGradient id="whyLineGrad" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="indLineGrad" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stop-color="#0FA898"/>
           <stop offset="100%" stop-color="#6D4AEB"/>
         </linearGradient>
       </defs>
-      <g stroke="url(#whyLineGrad)" stroke-width="1" opacity="0.35">
-        <line x1="0" y1="60" x2="260" y2="60"/>
-        <line x1="120" y1="0" x2="120" y2="140"/>
-        <line x1="220" y1="20" x2="220" y2="180"/>
-        <line x1="900" y1="30" x2="1120" y2="30"/>
-        <line x1="980" y1="0" x2="980" y2="160"/>
-        <line x1="60" y1="320" x2="60" y2="460"/>
-        <line x1="0" y1="400" x2="200" y2="400"/>
-        <line x1="1060" y1="280" x2="1060" y2="460"/>
-        <line x1="920" y1="420" x2="1120" y2="420"/>
+      <g stroke="url(#indLineGrad)" stroke-width="1" opacity="0.35">
+        <line x1="860" y1="20" x2="1120" y2="20"/>
+        <line x1="1000" y1="0" x2="1000" y2="150"/>
+        <line x1="900" y1="10" x2="900" y2="170"/>
+        <line x1="0" y1="60" x2="180" y2="60"/>
+        <line x1="80" y1="0" x2="80" y2="140"/>
+        <line x1="0" y1="380" x2="220" y2="380"/>
+        <line x1="120" y1="320" x2="120" y2="460"/>
+        <line x1="920" y1="400" x2="1120" y2="400"/>
+        <line x1="1040" y1="340" x2="1040" y2="460"/>
       </g>
       <g fill="#0FA898">
-        <circle cx="120" cy="60" r="3"/>
-        <circle cx="220" cy="20" r="2.5"/>
-        <circle cx="980" cy="30" r="3"/>
-        <circle cx="60" cy="320" r="2.5"/>
-        <circle cx="1060" cy="280" r="3"/>
+        <circle cx="1000" cy="20" r="3"/>
+        <circle cx="80" cy="60" r="2.5"/>
+        <circle cx="120" cy="380" r="3"/>
+        <circle cx="1040" cy="400" r="2.5"/>
       </g>
     </svg>
     <div class="wrap">
       <div class="section-head reveal">
-        <div class="eyebrow" id="cms-why-eyebrow">Why Auwion</div>
-        <h2 class="section-title" id="cms-why-title">Systems people, not just software people</h2>
-        <p class="section-sub" id="cms-why-sub">One team across implementation, support, and the books — so nothing falls into the gap between vendors.</p>
+        <div class="eyebrow">Industries we serve</div>
+        <h2 class="section-title">Built for your sector, not a generic template</h2>
+        <p class="section-sub">We deliver Microsoft Dynamics 365 Business Central and ERP solutions tailored to the unique requirements of different industries. Our experience spans manufacturing, trading, services, apparel, poultry, export, and other specialized sectors.</p>
       </div>
-      <div class="why-grid reveal" id="cms-why-grid">
-        <div class="why-card">
-          <div class="why-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
-          </div>
-          <span class="tag">Cross-platform</span>
-          <p>Certified across Business Central, Zoho Books, and Odoo, so the recommendation fits your business, not our specialty.</p>
+      <div class="industries-grid reveal">
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/></svg></div>
+          <h3>Construction</h3>
+          <p>Track project costs, subcontractors, and equipment in real time, with job costing built directly into your financials.</p>
         </div>
-        <div class="why-card">
-          <div class="why-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"/><path d="M3 20c0-3 2.5-5 5-5"/><path d="M21 20c0-3-2.5-5-5-5"/></svg>
-          </div>
-          <span class="tag">End to end</span>
-          <p>One team for implementation, support, and bookkeeping — instead of handing you off between vendors.</p>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg></div>
+          <h3>Engineering</h3>
+          <p>Manage projects, resources, and change orders with full visibility from design through delivery.</p>
         </div>
-        <div class="why-card">
-          <div class="why-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h12"/><path d="M11 6l6 6-6 6"/><path d="M17 6h4v12h-4"/></svg>
-          </div>
-          <span class="tag">Migrations</span>
-          <p>We plan migrations from legacy systems fully before touching your data, and stay until they're finished.</p>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 3 4 1.5-1.5 3L21 12l-2.5 1.5L20 17l-4 1.5-1 3H9l-1-3-4-1.5 1.5-3L4 12l2.5-1.5L5 7.5 9 6Z"/><path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z"/></svg></div>
+          <h3>Apparel &amp; Garment</h3>
+          <p>Handle style, size, and colour matrices, seasonal planning, and multi-stage production in one system.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5-5 18-4-8-8-4z"/></svg></div>
+          <h3>Export-Oriented Businesses</h3>
+          <p>Manage multi-currency trade, shipping documentation, and compliance across international markets.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l4-3 4 3v12"/><path d="M11 21V6l4-3 4 3v15"/><path d="M3 13h4"/><path d="M11 10h4"/></svg></div>
+          <h3>Manufacturing</h3>
+          <p>Plan production, manage BOMs and routings, and keep shop floor data connected to your finances.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="7" width="15" height="10" rx="1"/><path d="M16 10h3l4 3v4h-7z"/><circle cx="6" cy="19" r="1.6"/><circle cx="18.5" cy="19" r="1.6"/></svg></div>
+          <h3>Trading, Sales &amp; Distribution</h3>
+          <p>Run purchasing, inventory, and multi-warehouse distribution with real-time stock visibility.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h2l2.4 12.2a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="21" r="1.4"/><circle cx="17" cy="21" r="1.4"/></svg></div>
+          <h3>Service Industry</h3>
+          <p>Schedule resources, track billable time, and manage contracts and service agreements end to end.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6l-1 7h2l-6 13 1-9H9z"/></svg></div>
+          <h3>Distilleries &amp; Beverage</h3>
+          <p>Manage batch production, aging, licensing, and excise compliance alongside your day-to-day operations.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a4 4 0 0 1-4 4H9l-4 3 1-4a5 5 0 0 1-2-4 5 5 0 0 1 5-5h3a4 4 0 0 1 4 4v2Z"/><path d="M17 8h1a3 3 0 0 1 3 3v1"/><circle cx="8.5" cy="7.5" r=".6" fill="#0FA898"/></svg></div>
+          <h3>Poultry &amp; Agriculture</h3>
+          <p>Track flocks, feed, yields, and seasonal cycles with traceability from farm to sale.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 7H6.2"/></svg></div>
+          <h3>Retail Wholesale</h3>
+          <p>Unify POS, inventory, and wholesale pricing so stock and margins stay accurate across channels.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2 0 3.5-1.5 3.5-3.5S14 5 12 5s-3.5 1.5-3.5 3.5S10 12 12 12Z"/><path d="M12 12c-2 0-3.5 1.5-3.5 3.5S10 19 12 19s3.5-1.5 3.5-3.5S14 12 12 12Z"/><path d="M12 12c0-2-1.5-3.5-3.5-3.5S5 10 5 12s1.5 3.5 3.5 3.5" /><path d="M12 12c0-2 1.5-3.5 3.5-3.5S19 10 19 12s-1.5 3.5-3.5 3.5"/><path d="M12 12v8"/></svg></div>
+          <h3>Floral &amp; Event Management</h3>
+          <p>Coordinate orders, perishable inventory, and event logistics without losing track of the details.</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>
+          <h3>Energy Services</h3>
+          <p>Manage field service, assets, and long-term contracts with the reporting your stakeholders expect.</p>
         </div>
       </div>
     </div>
@@ -572,6 +655,66 @@
         </a>
       </div>
       <a href="articles.html" class="view-all">View all articles →</a>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why">
+    <svg class="why-lines" viewBox="0 0 1120 460" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="whyLineGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#0FA898"/>
+          <stop offset="100%" stop-color="#6D4AEB"/>
+        </linearGradient>
+      </defs>
+      <g stroke="url(#whyLineGrad)" stroke-width="1" opacity="0.35">
+        <line x1="0" y1="60" x2="260" y2="60"/>
+        <line x1="120" y1="0" x2="120" y2="140"/>
+        <line x1="220" y1="20" x2="220" y2="180"/>
+        <line x1="900" y1="30" x2="1120" y2="30"/>
+        <line x1="980" y1="0" x2="980" y2="160"/>
+        <line x1="60" y1="320" x2="60" y2="460"/>
+        <line x1="0" y1="400" x2="200" y2="400"/>
+        <line x1="1060" y1="280" x2="1060" y2="460"/>
+        <line x1="920" y1="420" x2="1120" y2="420"/>
+      </g>
+      <g fill="#0FA898">
+        <circle cx="120" cy="60" r="3"/>
+        <circle cx="220" cy="20" r="2.5"/>
+        <circle cx="980" cy="30" r="3"/>
+        <circle cx="60" cy="320" r="2.5"/>
+        <circle cx="1060" cy="280" r="3"/>
+      </g>
+    </svg>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow" id="cms-why-eyebrow">Why Auwion</div>
+        <h2 class="section-title" id="cms-why-title">Systems people, not just software people</h2>
+        <p class="section-sub" id="cms-why-sub">One team across implementation, support, and the books — so nothing falls into the gap between vendors.</p>
+      </div>
+      <div class="why-grid reveal" id="cms-why-grid">
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
+          </div>
+          <span class="tag">Cross-platform</span>
+          <p>Certified across Business Central, Zoho Books, and Odoo, so the recommendation fits your business, not our specialty.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"/><path d="M3 20c0-3 2.5-5 5-5"/><path d="M21 20c0-3-2.5-5-5-5"/></svg>
+          </div>
+          <span class="tag">End to end</span>
+          <p>One team for implementation, support, and bookkeeping — instead of handing you off between vendors.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h12"/><path d="M11 6l6 6-6 6"/><path d="M17 6h4v12h-4"/></svg>
+          </div>
+          <span class="tag">Migrations</span>
+          <p>We plan migrations from legacy systems fully before touching your data, and stay until they're finished.</p>
+        </div>
+      </div>
     </div>
   </section>
 
