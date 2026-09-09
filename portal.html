@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Techstar Client Portal</title>
+<title>Auwion Client Portal</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 :root{
@@ -158,7 +158,7 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 <!-- ══════════════════ LOGIN ══════════════════ -->
 <div class="auth-wrap" id="loginScreen">
   <div class="auth-card">
-    <div class="auth-logo"><div class="auth-logo-icon">T</div><div><div class="auth-title">Techstar Client Portal</div><div class="auth-sub">Track the status of your requests</div></div></div>
+    <div class="auth-logo"><div class="auth-logo-icon">A</div><div><div class="auth-title">Auwion Client Portal</div><div class="auth-sub">Track the status of your requests</div></div></div>
     <div id="loginError" class="auth-error hidden"></div>
     <form id="loginForm">
       <div class="field"><label>Email</label><input type="email" id="loginEmail" required autocomplete="username"/></div>
@@ -175,11 +175,11 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 <!-- ══════════════════ SIGN UP / REQUEST ACCESS ══════════════════ -->
 <div class="auth-wrap hidden" id="signupScreen">
   <div class="auth-card">
-    <div class="auth-logo"><div class="auth-logo-icon">T</div><div><div class="auth-title">Request Portal Access</div><div class="auth-sub">Create your login — Techstar will confirm your access</div></div></div>
+    <div class="auth-logo"><div class="auth-logo-icon">A</div><div><div class="auth-title">Request Portal Access</div><div class="auth-sub">Create your login — Auwion will confirm your access</div></div></div>
     <div id="signupError" class="auth-error hidden"></div>
     <form id="signupForm">
       <div class="field"><label>Your Name</label><input type="text" id="signupName" required/></div>
-      <div class="field"><label>Company Name</label><input type="text" id="signupCompany" required placeholder="e.g. Techstar Packaging (Private) Limited"/></div>
+      <div class="field"><label>Company Name</label><input type="text" id="signupCompany" required placeholder="e.g. Acme Trading (Private) Limited"/></div>
       <div class="field"><label>Email</label><input type="email" id="signupEmail" required autocomplete="username"/></div>
       <div class="field"><label>Password</label><input type="password" id="signupPassword" minlength="8" required autocomplete="new-password"/></div>
       <button type="submit" class="btn btn-primary" id="signupBtn">Create Account</button>
@@ -191,8 +191,8 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 <!-- ══════════════════ SIGN UP RECEIVED ══════════════════ -->
 <div class="auth-wrap hidden" id="signupReceivedScreen">
   <div class="auth-card">
-    <div class="auth-logo"><div class="auth-logo-icon">T</div><div><div class="auth-title">Request Received</div></div></div>
-    <div class="auth-success">Your account has been created. Techstar will review your request and confirm access shortly — you'll be able to sign in with your email and password once that's done.</div>
+    <div class="auth-logo"><div class="auth-logo-icon">A</div><div><div class="auth-title">Request Received</div></div></div>
+    <div class="auth-success">Your account has been created. Auwion will review your request and confirm access shortly — you'll be able to sign in with your email and password once that's done.</div>
     <button class="btn btn-primary" onclick="showLogin()">Back to Sign In</button>
   </div>
 </div>
@@ -200,7 +200,7 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 <!-- ══════════════════ FORGOT PASSWORD ══════════════════ -->
 <div class="auth-wrap hidden" id="forgotScreen">
   <div class="auth-card">
-    <div class="auth-logo"><div class="auth-logo-icon">T</div><div><div class="auth-title">Reset Password</div><div class="auth-sub">We'll email you a reset link</div></div></div>
+    <div class="auth-logo"><div class="auth-logo-icon">A</div><div><div class="auth-title">Reset Password</div><div class="auth-sub">We'll email you a reset link</div></div></div>
     <div id="forgotError" class="auth-error hidden"></div>
     <div id="forgotSuccess" class="auth-success hidden"></div>
     <form id="forgotForm">
@@ -214,7 +214,7 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 <!-- ══════════════════ SET NEW PASSWORD (from recovery email) ══════════════════ -->
 <div class="auth-wrap hidden" id="resetScreen">
   <div class="auth-card">
-    <div class="auth-logo"><div class="auth-logo-icon">T</div><div><div class="auth-title">Set New Password</div><div class="auth-sub">Choose a new password for your account</div></div></div>
+    <div class="auth-logo"><div class="auth-logo-icon">A</div><div><div class="auth-title">Set New Password</div><div class="auth-sub">Choose a new password for your account</div></div></div>
     <div id="resetError" class="auth-error hidden"></div>
     <form id="resetForm">
       <div class="field"><label>New Password</label><input type="password" id="resetPassword" minlength="8" required/></div>
@@ -226,8 +226,8 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 <!-- ══════════════════ NO ACCESS ══════════════════ -->
 <div class="auth-wrap hidden" id="noAccessScreen">
   <div class="auth-card">
-    <div class="auth-logo"><div class="auth-logo-icon">T</div><div><div class="auth-title">Access Pending</div></div></div>
-    <div class="auth-error">Your account exists but hasn't been approved for portal access yet — this is normal right after signing up. If you just requested access, check back soon; otherwise contact Techstar.</div>
+    <div class="auth-logo"><div class="auth-logo-icon">A</div><div><div class="auth-title">Access Pending</div></div></div>
+    <div class="auth-error">Your account exists but hasn't been approved for portal access yet — this is normal right after signing up. If you just requested access, check back soon; otherwise contact Auwion.</div>
     <button class="btn" onclick="logout()">Back to Sign In</button>
   </div>
 </div>
@@ -416,10 +416,10 @@ document.getElementById('signupForm').addEventListener('submit', async (e)=>{
   err.classList.add('hidden'); btn.disabled = true; btn.textContent = 'Creating…';
   try{
     // Public signup — creates a login only. It grants NO portal access by
-    // itself: access is only ever turned on when Techstar approves the
+    // itself: access is only ever turned on when Auwion approves the
     // request and assigns this account to a company (see index.html).
     // requested_company/full_name are stored as metadata purely so
-    // Techstar can see what to approve them as — they are never trusted
+    // Auwion can see what to approve them as — they are never trusted
     // as the actual access grant.
     const r = await fetch(`${SB_URL}/auth/v1/signup`, {
       method:'POST', headers:{ 'Content-Type':'application/json', 'apikey':SB_ANON_KEY },
