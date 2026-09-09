@@ -267,47 +267,79 @@
   .breadcrumb a{color:var(--text-dim);text-decoration:none;}
   .breadcrumb a:hover{color:var(--teal-soft);}
 
+  .service-intro{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(560px 320px at 92% -10%, rgba(15,168,152,0.09), transparent 60%),
+      radial-gradient(480px 300px at -4% 100%, rgba(21,2,76,0.06), transparent 60%),
+      var(--bg);
+  }
+  .services-divider{width:40px;height:3px;border-radius:100px;background:var(--grad);margin:2px 0 4px;}
+
   .anchor-nav{
     position:sticky;top:73px;z-index:30;
     display:flex;gap:8px;flex-wrap:wrap;
     padding:14px 0;margin-bottom:8px;
-    background:#15024C;backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--border-soft);
+    background:linear-gradient(120deg, #15024C 0%, #291771 100%);
+    box-shadow:0 8px 24px rgba(21,2,76,0.18);
   }
   .anchor-nav a{
-    font-size:13px;color:#FFFFFF;text-decoration:none;
-    padding:8px 14px;border:1px solid var(--border);border-radius:100px;
-    white-space:nowrap;transition:all .15s ease;flex-shrink:0;
+    font-size:13px;font-weight:600;color:rgba(255,255,255,0.78);text-decoration:none;
+    padding:9px 16px;border:1px solid rgba(255,255,255,0.16);border-radius:100px;background:rgba(255,255,255,0.05);
+    white-space:nowrap;transition:all .2s ease;flex-shrink:0;
   }
   #cms-anchor-nav{scrollbar-width:none;-ms-overflow-style:none;}
   #cms-anchor-nav::-webkit-scrollbar{display:none;}
-  .anchor-nav a:hover{color:#FFFFFF;border-color:var(--teal);}
+  .anchor-nav a:hover{color:#FFFFFF;border-color:var(--teal);background:rgba(15,168,152,0.18);transform:translateY(-1px);}
 
   .sub-block{
-    display:grid;grid-template-columns:1fr;gap:16px;
-    padding:22px 0;border-bottom:1px solid var(--border-soft);
+    display:grid;grid-template-columns:1fr;gap:18px;
+    padding:26px;margin-bottom:16px;
+    background:#fff;border:1px solid var(--border);border-radius:16px;
+    box-shadow:0 4px 14px rgba(16,20,43,0.04);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     scroll-margin-top:150px;
   }
-  @media(min-width:760px){.sub-block{grid-template-columns:1fr 1fr;align-items:center;gap:24px;}}
+  .sub-block:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(16,20,43,0.09);border-color:var(--teal);}
+  @media(min-width:760px){.sub-block{grid-template-columns:88px 1fr;align-items:center;gap:26px;padding:30px 32px;}}
   .sub-block .visual{
-    height:100px;
+    width:64px;height:64px;border-radius:16px;flex:none;
+    background:linear-gradient(155deg, rgba(21,2,76,0.07), rgba(15,168,152,0.10));
+    border:1px solid var(--border);
+    transition:transform .2s ease;
   }
-  .sub-block h3{font-family:var(--font-display);font-size:22px;font-weight:600;margin:0 0 10px;}
+  .sub-block:hover .visual{transform:scale(1.06) rotate(-3deg);}
+  .sub-block .visual svg{width:32px;height:32px;}
+  .sub-block h3{font-family:var(--font-display);font-size:21px;font-weight:600;margin:0 0 8px;}
   .sub-block p{color:var(--text-soft);font-size:15px;margin:0;line-height:1.7;}
 
   .badge-row{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0;}
   .badge{
     display:inline-flex;align-items:center;gap:8px;
-    border:1px solid var(--border);border-radius:100px;padding:8px 16px;
-    font-size:13px;color:var(--text-soft);background:var(--card);
+    border:1px solid rgba(15,168,152,0.35);border-radius:100px;padding:9px 18px;
+    font-size:13px;font-weight:600;color:#15024C;
+    background:linear-gradient(135deg, rgba(15,168,152,0.10), rgba(21,2,76,0.05));
   }
-  .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
 
-  .three-col{display:grid;grid-template-columns:1fr;gap:16px;}
+  .three-col{display:grid;grid-template-columns:1fr;gap:18px;}
   @media(min-width:700px){.three-col{grid-template-columns:repeat(3,1fr);}}
-  .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;}
+  .info-card{
+    position:relative;overflow:hidden;
+    background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .info-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);}
+  .info-card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(16,20,43,0.08);border-color:var(--teal);}
   .info-card h4{font-family:var(--font-display);font-size:16px;font-weight:600;margin:0 0 10px;}
   .info-card p{color:var(--text-soft);font-size:14px;margin:0;line-height:1.7;}
+
+  .inline-cta{
+    margin-top:40px;padding:24px 28px;border:1px solid var(--border);border-radius:16px;
+    background:linear-gradient(135deg, rgba(15,168,152,0.06), rgba(21,2,76,0.04));
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  }
+  .inline-cta p{margin:0;font-size:15px;font-weight:600;color:var(--text);}
 
   .price-card{
     background:var(--card);border:1px solid var(--border);border-radius:16px;
@@ -399,11 +431,6 @@
   }
   .article-full .body-copy p{color:var(--text-soft);font-size:16px;line-height:1.8;margin:0 0 20px;}
   .article-full .body-copy h2{font-family:var(--font-display);font-size:22px;margin:36px 0 14px;}
-  .inline-cta{
-    margin-top:40px;padding:22px 24px;border:1px solid var(--border);border-radius:14px;
-    background:var(--card);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
-  }
-  .inline-cta p{margin:0;font-size:14px;color:var(--text-soft);}
 
   /* about/contact */
   .contact-grid{display:grid;grid-template-columns:1fr;gap:40px;}
@@ -449,11 +476,12 @@
 </header>
 
 <main>
-  <section style="padding-top:60px;">
+  <section class="service-intro" style="padding-top:60px;">
     <div class="wrap">
       <div class="breadcrumb"><a href="index.html">Home</a> / <a href="services.html">Services</a> / Odoo</div>
       <div class="section-head reveal">
         <div class="eyebrow" id="cms-eyebrow">Service</div>
+        <div class="services-divider"></div>
         <h1 class="section-title" style="font-size:clamp(30px,4vw,44px);" id="cms-headline">Odoo</h1>
         <p class="section-sub" id="cms-sub">Auwion's Odoo practice, from first implementation through ongoing support.</p>
       </div>
@@ -518,9 +546,9 @@
         
       </div>
 
-      <div class="reveal" style="padding-top:40px;">
-        <p class="section-sub" style="margin-bottom:14px;" id="cms-crosssell-text">Also need your books managed?</p>
-        <a href="bookkeeping.html" class="btn btn-ghost" id="cms-crosssell-btn">See Book keeping →</a>
+      <div class="inline-cta reveal">
+        <p id="cms-crosssell-text">Also need your books managed?</p>
+        <a href="bookkeeping.html" class="btn btn-primary" id="cms-crosssell-btn">See Book keeping →</a>
       </div>
     </div>
   </section>
