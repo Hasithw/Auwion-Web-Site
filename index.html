@@ -206,28 +206,50 @@
   @media(min-width:760px){.service-arrow{justify-self:end;text-align:right;}}
 
   /* ---------- Why band ---------- */
-  .why{background:var(--bg-2);}
-  .why-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+  .why{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(900px 480px at 12% 0%, rgba(15,168,152,0.20), transparent 60%),
+      radial-gradient(800px 460px at 92% 100%, rgba(15,168,152,0.14), transparent 55%),
+      linear-gradient(165deg, #0A0729 0%, #15024C 52%, #0A0729 100%);
+  }
+  .why-lines{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0.5;}
+  .why .wrap{position:relative;z-index:2;}
+  .why .eyebrow{color:#fff;}
+  .why .eyebrow::before{background:var(--teal);}
+  .why h2.section-title{color:#fff;}
+  .why .section-sub{color:rgba(255,255,255,0.66);}
+  .why-grid{display:grid;grid-template-columns:1fr;gap:20px;}
   @media(min-width:700px){.why-grid{grid-template-columns:repeat(3,1fr);}}
   .why-card{
-    background:var(--card);border-radius:14px;padding:28px 24px;
-    transition:transform .15s ease, box-shadow .15s ease;
+    position:relative;
+    background:linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:16px;padding:32px 24px 28px;
+    backdrop-filter:blur(8px);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
   }
-  .why-card:nth-child(1){border:1.5px solid var(--teal);box-shadow:0 0 20px rgba(15,168,152,0.22);}
-  .why-card:nth-child(2){border:1.5px solid #15024C;box-shadow:0 0 20px rgba(21,2,76,0.22);}
-  .why-card:nth-child(3){border:1.5px solid var(--teal);box-shadow:0 0 20px rgba(15,168,152,0.22);}
-  .why-card:hover{transform:translateY(-3px);}
-  .why-card:nth-child(1):hover{box-shadow:0 0 28px rgba(15,168,152,0.32);}
-  .why-card:nth-child(2):hover{box-shadow:0 0 28px rgba(21,2,76,0.32);}
-  .why-card:nth-child(3):hover{box-shadow:0 0 28px rgba(15,168,152,0.32);}
+  .why-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--teal);
+    box-shadow:0 16px 34px rgba(15,168,152,0.22);
+  }
+  .why-icon{
+    width:52px;height:52px;margin:0 0 22px;
+    border-radius:14px;
+    background:rgba(15,168,152,0.14);
+    border:1.5px solid var(--teal);
+    transform:rotate(45deg);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .why-icon svg{width:22px;height:22px;transform:rotate(-45deg);stroke:var(--teal-soft);}
   .why-card .tag{
-    font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;color:var(--pink-soft);
+    font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;color:var(--teal-soft);
     text-transform:uppercase;margin-bottom:14px;display:inline-block;
-    background:rgba(21,2,76,0.08);padding:4px 10px;border-radius:100px;
+    background:rgba(15,168,152,0.14);padding:4px 10px;border-radius:100px;
   }
-  .why-card:nth-child(2) .tag{color:var(--teal-soft);background:rgba(15,168,152,0.10);}
-  .why-card:nth-child(3) .tag{color:var(--pink-soft);background:rgba(21,2,76,0.08);}
-  .why-card p{margin:0;font-size:16.5px;color:var(--text-soft);}
+  .why-card p{margin:0;font-size:16.5px;color:rgba(255,255,255,0.78);}
 
   /* ---------- Articles ---------- */
   .article-grid{display:grid;grid-template-columns:1fr;gap:22px;}
@@ -434,6 +456,32 @@
 
   <!-- WHY -->
   <section class="why">
+    <svg class="why-lines" viewBox="0 0 1120 460" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="whyLineGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#0FA898"/>
+          <stop offset="100%" stop-color="#6D4AEB"/>
+        </linearGradient>
+      </defs>
+      <g stroke="url(#whyLineGrad)" stroke-width="1" opacity="0.35">
+        <line x1="0" y1="60" x2="260" y2="60"/>
+        <line x1="120" y1="0" x2="120" y2="140"/>
+        <line x1="220" y1="20" x2="220" y2="180"/>
+        <line x1="900" y1="30" x2="1120" y2="30"/>
+        <line x1="980" y1="0" x2="980" y2="160"/>
+        <line x1="60" y1="320" x2="60" y2="460"/>
+        <line x1="0" y1="400" x2="200" y2="400"/>
+        <line x1="1060" y1="280" x2="1060" y2="460"/>
+        <line x1="920" y1="420" x2="1120" y2="420"/>
+      </g>
+      <g fill="#0FA898">
+        <circle cx="120" cy="60" r="3"/>
+        <circle cx="220" cy="20" r="2.5"/>
+        <circle cx="980" cy="30" r="3"/>
+        <circle cx="60" cy="320" r="2.5"/>
+        <circle cx="1060" cy="280" r="3"/>
+      </g>
+    </svg>
     <div class="wrap">
       <div class="section-head reveal">
         <div class="eyebrow" id="cms-why-eyebrow">Why Auwion</div>
@@ -442,14 +490,23 @@
       </div>
       <div class="why-grid reveal" id="cms-why-grid">
         <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
+          </div>
           <span class="tag">Cross-platform</span>
           <p>Certified across Business Central, Zoho Books, and Odoo, so the recommendation fits your business, not our specialty.</p>
         </div>
         <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"/><path d="M3 20c0-3 2.5-5 5-5"/><path d="M21 20c0-3-2.5-5-5-5"/></svg>
+          </div>
           <span class="tag">End to end</span>
           <p>One team for implementation, support, and bookkeeping — instead of handing you off between vendors.</p>
         </div>
         <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h12"/><path d="M11 6l6 6-6 6"/><path d="M17 6h4v12h-4"/></svg>
+          </div>
           <span class="tag">Migrations</span>
           <p>We plan migrations from legacy systems fully before touching your data, and stay until they're finished.</p>
         </div>
