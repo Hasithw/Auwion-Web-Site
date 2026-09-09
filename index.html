@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function(){
+  var h = window.location.hash;
+  if (h && (h.indexOf('access_token=') !== -1 || h.indexOf('error=') !== -1 || h.indexOf('type=recovery') !== -1)) {
+    window.location.replace('/login.html' + h);
+  }
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Auwion — Business Central, Zoho Books & Odoo Implementation</title>
