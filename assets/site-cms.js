@@ -375,23 +375,35 @@
         .eq('status', 'published')
         .order('display_order', { ascending: true });
 
-      if (error || !data || data.length === 0) return; // keep built-in rows as-is
+      if (error || !data || data.length === 0) return; // keep built-in layout as-is
 
-      tableEl.innerHTML = data.map(function (s, i) {
-        const icon = s.icon_key ? renderServiceIcon(s.icon_key, 'row-' + i, 26) : '';
+      const arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
+      const first = data[0];
+      const rest = data.slice(1);
+
+      const featuredIcon = first.icon_key ? renderServiceIcon(first.icon_key, 'feat', 26) : '';
+      const featuredHtml = '<a href="' + escapeHtmlLite(first.link_url || (first.slug + '.html')) + '" class="service-featured">' +
+        '<div class="service-featured-top">' +
+          '<div class="service-icon">' + featuredIcon + '</div>' +
+          '<span class="service-featured-badge">Flagship platform</span>' +
+        '</div>' +
+        '<h3>' + escapeHtmlLite(first.name) + '</h3>' +
+        '<p>' + escapeHtmlLite(first.short_description) + '</p>' +
+        '<span class="service-featured-cta">Explore ' + escapeHtmlLite(first.name) + ' ' + arrowSvg + '</span>' +
+        '</a>';
+
+      const cardsHtml = rest.map(function (s, i) {
+        const icon = s.icon_key ? renderServiceIcon(s.icon_key, 'card-' + i, 22) : '';
         const href = s.link_url || (s.slug + '.html');
-        // Icon is nested INSIDE the first grid cell (alongside the name),
-        // not added as a 4th child — .service-row's grid-template-columns
-        // expects exactly 3 direct children (name / desc / arrow), so
-        // adding a sibling would shift every column and break the layout.
-        return '<a href="' + escapeHtmlLite(href) + '" class="service-row">' +
-          '<span style="display:flex;align-items:center;gap:12px;">' +
-          (icon ? '<span style="display:inline-flex;flex-shrink:0;">' + icon + '</span>' : '') +
-          '<span class="service-name">' + escapeHtmlLite(s.name) + '</span>' +
-          '</span>' +
-          '<span class="service-desc">' + escapeHtmlLite(s.short_description) + '</span>' +
-          '<span class="service-arrow">View →</span></a>';
+        return '<a href="' + escapeHtmlLite(href) + '" class="service-card">' +
+          '<div class="service-icon">' + icon + '</div>' +
+          '<h3>' + escapeHtmlLite(s.name) + '</h3>' +
+          '<p>' + escapeHtmlLite(s.short_description) + '</p>' +
+          '<span class="service-card-arrow">View service ' + arrowSvg + '</span>' +
+          '</a>';
       }).join('');
+
+      tableEl.innerHTML = featuredHtml + '<div class="services-grid">' + cardsHtml + '</div>';
     } catch (e) {
       console.warn('[site-cms] Failed to load services table:', e && e.message);
     }
