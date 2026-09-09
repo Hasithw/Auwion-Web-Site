@@ -6,6 +6,7 @@
 <title>Auwion Client Portal</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap');
 :root{
   --bg:#f0f4f8;--surface:#ffffff;--s2:#f1f5f9;--s3:#e8edf4;
   --border:#dde3ec;--b2:#c8d1de;
@@ -14,12 +15,58 @@
   --green:#16a34a;--gdim:rgba(22,163,74,.1);
   --red:#dc2626;--rdim:rgba(220,38,38,.1);
   --r:8px;--rlg:12px;
+  --pink:#15024C;--teal:#0FA898;
+  --grad:linear-gradient(90deg, var(--pink), var(--teal));
+  --font-display:'Space Grotesk', sans-serif;
+  --border-soft:rgba(16,20,43,0.07);
+  --maxw:1120px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;overflow-x:hidden}
 .hidden{display:none!important}
+
+/* ---------- Site header (shared across the marketing site) ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:2;}
+header.site{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,248,252,0.9);
+  backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid var(--border-soft);
+}
+header.site .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
+.wordmark{
+  font-family:var(--font-display);font-weight:700;font-size:18px;
+  letter-spacing:0.01em;text-decoration:none;color:var(--text);
+}
+.wordmark span{
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+nav.links{display:none;align-items:center;gap:32px;}
+@media(min-width:860px){nav.links{display:flex;}}
+nav.links a{text-decoration:none;font-size:14px;color:var(--t2);transition:color .15s ease;}
+nav.links a:hover{color:var(--text);}
+.site-nav-cta{
+  display:none;align-items:center;gap:8px;
+  font-family:Inter,sans-serif;font-size:14px;font-weight:600;color:#fff;
+  padding:10px 20px;border-radius:100px;text-decoration:none;
+  background:var(--grad);transition:opacity .15s ease, transform .15s ease;
+}
+.site-nav-cta:hover{opacity:0.9;transform:translateY(-1px);}
+@media(min-width:860px){.site-nav-cta{display:inline-flex;}}
+.menu-toggle{
+  display:inline-flex;background:none;border:1px solid var(--border);
+  border-radius:100px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  letter-spacing:.08em;cursor:pointer;color:var(--text);
+}
+@media(min-width:860px){.menu-toggle{display:none;}}
+[data-mobile-nav]{display:none;}
+[data-mobile-nav].open{display:block;}
+@media(min-width:860px){[data-mobile-nav]{display:none !important;}}
+nav.links-mobile{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--border-soft);padding:14px 0 18px;}
+nav.links-mobile a{text-decoration:none;color:var(--text);font-size:15px;padding:10px 4px;border-bottom:1px solid var(--border-soft);}
+
 /* ── auth screen ── */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-wrap{min-height:calc(100vh - 73px);display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);padding:36px 32px;width:100%;max-width:400px;box-shadow:0 10px 40px rgba(15,23,42,.08)}
 .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
 .auth-logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700}
@@ -159,6 +206,30 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 </head>
 <body>
 
+<header class="site">
+  <div class="wrap nav">
+    <a href="index.html" class="wordmark">AUW<span>I</span>ON</a>
+    <nav class="links">
+      <a href="services.html">Services</a>
+      <a href="articles.html">Articles</a>
+      <a href="login.html">Client login</a>
+      <a href="about.html">Contact</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <a href="about.html#contact" class="site-nav-cta">Get in touch</a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" id="menuToggle">MENU</button>
+    </div>
+  </div>
+  <div class="wrap" data-mobile-nav id="mobile-nav">
+    <nav class="links-mobile">
+      <a href="services.html">Services</a>
+      <a href="articles.html">Articles</a>
+      <a href="login.html">Client login</a>
+      <a href="about.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
 <!-- ══════════════════ LOGIN ══════════════════ -->
 <div class="auth-wrap" id="loginScreen">
   <div class="auth-card">
@@ -281,6 +352,17 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
   <div class="drawer-body" id="drawerBody"></div>
 </div>
 
+<script>
+  var toggle = document.getElementById('menuToggle');
+  var mobileNav = document.getElementById('mobile-nav');
+  if(toggle){
+    toggle.addEventListener('click', function(){
+      var isOpen = mobileNav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.textContent = isOpen ? 'CLOSE' : 'MENU';
+    });
+  }
+</script>
 <script>
 // ══════════════════════════════════════════════════════════════════════
 // SUPABASE CONFIG — anon key only. This key is not secret; access is
