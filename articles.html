@@ -378,13 +378,6 @@
   }
 
   /* articles */
-  .filter-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;}
-  .filter-pill{
-    font-size:13px;padding:8px 16px;border-radius:100px;border:1px solid var(--border);
-    color:var(--text-soft);text-decoration:none;
-  }
-  .filter-pill.active{background:var(--grad);color:#fff;border-color:transparent;font-weight:600;}
-  .filter-pill:hover{border-color:var(--teal);}
 
   .article-full{max-width:680px;margin:0 auto;}
   .article-full .tag{font-family:var(--font-mono);font-size:12px;color:var(--teal-soft);text-transform:uppercase;letter-spacing:.08em;}
@@ -454,13 +447,6 @@
       <div class="section-head reveal in">
         <div class="eyebrow">From the ledger</div>
         <h1 class="section-title" style="font-size:clamp(30px,4vw,44px);">Articles</h1>
-      </div>
-      <div class="filter-row reveal in" id="articleFilters">
-        <a href="#" class="filter-pill active" data-filter="all">All</a>
-        <a href="#" class="filter-pill" data-filter="Business Central">Business Central</a>
-        <a href="#" class="filter-pill" data-filter="Zoho Books">Zoho Books</a>
-        <a href="#" class="filter-pill" data-filter="Odoo">Odoo</a>
-        <a href="#" class="filter-pill" data-filter="Bookkeeping">Bookkeeping</a>
       </div>
       <div class="article-grid reveal in" id="cms-article-grid">
         <a href="article-bc-migration.html" class="article-card">
@@ -578,43 +564,6 @@
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
   }
-</script>
-
-<script>
-  // Client-side tag filter for the article grid. Re-applies whenever the
-  // grid's content changes (e.g. once the CMS loader replaces the built-in
-  // cards with live Supabase data), so filtering keeps working either way.
-  (function(){
-    var grid = document.getElementById('cms-article-grid');
-    var filters = document.getElementById('articleFilters');
-    if(!grid || !filters) return;
-
-    var activeTag = 'all';
-
-    function applyFilter(){
-      var cards = grid.querySelectorAll('.article-card');
-      cards.forEach(function(card){
-        var thumb = card.querySelector('.article-thumb');
-        var cardTag = thumb ? thumb.getAttribute('data-tag') : '';
-        var show = (activeTag === 'all') || (cardTag === activeTag);
-        card.style.display = show ? '' : 'none';
-      });
-    }
-
-    filters.addEventListener('click', function(e){
-      var pill = e.target.closest('.filter-pill');
-      if(!pill) return;
-      e.preventDefault();
-      activeTag = pill.getAttribute('data-filter');
-      filters.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('active'); });
-      pill.classList.add('active');
-      applyFilter();
-    });
-
-    if('MutationObserver' in window){
-      new MutationObserver(applyFilter).observe(grid, { childList: true });
-    }
-  })();
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
