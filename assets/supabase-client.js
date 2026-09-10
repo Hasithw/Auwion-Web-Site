@@ -10,7 +10,7 @@
 const SUPABASE_URL = "https://ecrokcjkcchxjvesqmtb.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjcm9rY2prY2NoeGp2ZXNxbXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzYwNjQsImV4cCI6MjEwMDA1MjA2NH0.mTwwI6FiGTR_FDR2oPodb5Xdu2xl_ok7EtkY9pooo1E";
 
-// Loaded via CDN script tag in login.html / signup.html / about.html:
+// Loaded via CDN script tag in login.html / signup.html / contact.html:
 // <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 //
 // NOTE: the local variable below is named `supabaseClient`, not `supabase`,
@@ -70,12 +70,20 @@ async function auwionResetPassword({ email }) {
 }
 
 // ---------- Contact form ----------
-// Called from about.html. Writes a row to `contact_messages`. The anon key
-// can only insert (see /supabase/contact_messages.sql) — messages are read
-// back from the Supabase dashboard, not the site itself.
+// Called from contact.html. Writes a row to `contact_messages`.
+//
+// NOTE: this uses its OWN Supabase client/project (contactSupabaseClient),
+// separate from the main `supabaseClient` above used for login/signup/
+// portal access. They're intentionally different projects — do not merge
+// these back into one client/URL, or login and portal ticket fetching
+// will silently break.
+const CONTACT_SUPABASE_URL = "https://stodwjjgqzsqjnskyyka.supabase.co";
+const CONTACT_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0b2R3ampncXpzcWpuc2t5eWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDM2NDIsImV4cCI6MjEwMjUxOTY0Mn0.E9vXhxFvmpsfki8iZhtOyhn-X-mOgXXpUaEdgLiAnZA";
+const contactSupabaseClient = window.supabase.createClient(CONTACT_SUPABASE_URL, CONTACT_SUPABASE_ANON_KEY);
+
 async function auwionSendMessage({ fullName, email, phone, companyName, interestedIn, message }) {
   try {
-    const { error } = await supabaseClient.from("contact_messages").insert({
+    const { error } = await contactSupabaseClient.from("contact_messages").insert({
       full_name: fullName,
       email,
       phone,
