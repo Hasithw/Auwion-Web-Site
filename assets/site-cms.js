@@ -32,8 +32,8 @@
 // escape every value through escapeHtmlLite() first.
 
 (function () {
-  const CMS_SUPABASE_URL = "https://stodwjjgqzsqjnskyyka.supabase.co";
-  const CMS_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0b2R3ampncXpzcWpuc2t5eWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDM2NDIsImV4cCI6MjEwMjUxOTY0Mn0.E9vXhxFvmpsfki8iZhtOyhn-X-mOgXXpUaEdgLiAnZA";
+  const CMS_SUPABASE_URL = "https://fhlvcxyrutqxsqoyqpsj.supabase.co";
+  const CMS_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobHZjeHlydXRxeHNxb3lxcHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNDg3MjIsImV4cCI6MjEwNDYyNDcyMn0.EqPss_BMlHoX8MDuB9a0clFTByrvK53lSymvxh3nvQs";
   const FETCH_TIMEOUT_MS = 6000;
 
   function setState(state) {
