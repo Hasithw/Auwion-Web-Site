@@ -73,11 +73,12 @@ async function auwionResetPassword({ email }) {
 // Called from about.html. Writes a row to `contact_messages`. The anon key
 // can only insert (see /supabase/contact_messages.sql) — messages are read
 // back from the Supabase dashboard, not the site itself.
-async function auwionSendMessage({ fullName, email, companyName, interestedIn, message }) {
+async function auwionSendMessage({ fullName, email, phone, companyName, interestedIn, message }) {
   try {
     const { error } = await supabaseClient.from("contact_messages").insert({
       full_name: fullName,
       email,
+      phone,
       company_name: companyName,
       interested_in: interestedIn,
       message,
