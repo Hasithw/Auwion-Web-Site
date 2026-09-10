@@ -95,6 +95,16 @@ async function auwionSendMessage({ fullName, email, phone, companyName, interest
     if (error) return { ok: false, message: error.message };
     return { ok: true };
   } catch (err) {
+    // A raw "Failed to fetch" TypeError means the request never even
+    // reached Supabase — almost always an ad blocker/privacy extension
+    // blocking *.supabase.co, or the visitor being offline. Give a
+    // message that actually helps them, instead of the raw JS error text.
+    if (err && err.name === "TypeError" && /fetch/i.test(err.message || "")) {
+      return {
+        ok: false,
+        message: "Couldn't reach our server. If you have an ad blocker or privacy extension enabled, please pause it for this site and try again — or email us directly at hasith@auwion.com.",
+      };
+    }
     return { ok: false, message: (err && err.message) || "Network error. Please try again." };
   }
 }
