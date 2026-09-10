@@ -416,20 +416,10 @@
 
   /* ---------- CTA band ---------- */
   .cta-band{
-    position:relative;
-    background:#fff;border:1px solid var(--border);
-    box-shadow:0 24px 60px -24px rgba(15,168,152,0.35), 0 10px 30px -10px rgba(21,2,76,0.12);
-    border-radius:24px;padding:64px 40px;text-align:center;margin:0 auto;
+    background:var(--grad);color:#fff;border-radius:20px;padding:56px 40px;text-align:center;margin:0 auto;
   }
-  .cta-band .eyebrow{justify-content:center;margin:0 0 18px;}
-  .cta-band h2{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.2vw,32px);margin:0 0 12px;color:var(--text);}
-  .cta-band p{margin:0 0 30px;color:var(--text-soft);font-size:16px;}
-  .cta-band .btn-dark{
-    border-color:transparent;background:var(--grad);color:#fff;
-    box-shadow:0 14px 32px -10px rgba(15,168,152,0.55);
-    transition:transform .2s ease, box-shadow .2s ease;
-  }
-  .cta-band .btn-dark:hover{transform:translateY(-2px);box-shadow:0 18px 38px -8px rgba(15,168,152,0.65);opacity:1;}
+  .cta-band h2{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.2vw,32px);margin:0 0 12px;}
+  .cta-band p{margin:0 0 28px;color:rgba(255,255,255,0.85);font-size:16px;}
 
   /* ---------- Footer ---------- */
   footer{border-top:1px solid var(--border-soft);padding:60px 0 30px;background:var(--bg-2);}
@@ -455,7 +445,7 @@
 
 <header class="site">
   <div class="wrap nav">
-    <a href="#top" class="wordmark">AUW<span>I</span>ON</a>
+    <a href="index.html" class="wordmark">AUW<span>I</span>ON</a>
     <nav class="links">
       <a href="index.html">Home</a>
       <a href="about-us.html">About Us</a>
@@ -464,7 +454,7 @@
       <a href="login.html">Client login</a>
     </nav>
     <div style="display:flex;align-items:center;gap:14px;">
-      <a href="https://www.auwion.com/contact.html" class="btn btn-primary nav-cta">Get in touch</a>
+      <a href="https://www.auwion.com/contact.html#contact" class="btn btn-primary nav-cta">Get in touch</a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav" id="menuToggle">MENU</button>
     </div>
   </div>
@@ -514,7 +504,7 @@
       <p class="sub" id="cms-hero-sub">We implement and support Business Central, Zoho Books, and Odoo, and build the web apps and sites that extend them — with the expertise to get it right and the speed to get it done.</p>
       <div class="hero-ctas">
         <a href="services.html" class="btn btn-primary" id="cms-cta-primary">Explore services</a>
-        <a href="https://www.auwion.com/contact.html" class="btn btn-ghost" id="cms-cta-secondary">Talk to us</a>
+        <a href="https://www.auwion.com/contact.html#contact" class="btn btn-ghost" id="cms-cta-secondary">Talk to us</a>
       </div>
 
       <!-- Signature: balance card -->
@@ -580,7 +570,7 @@
     </svg>
     <div class="wrap">
       <div class="section-head reveal">
-        <div class="eyebrow">Industry-Focused Solutions</div>
+        <div class="eyebrow">Industries we serve</div>
         <h2 class="section-title">Built for your sector, not a generic template</h2>
         <p class="section-sub">We deliver Microsoft Dynamics 365 Business Central and ERP solutions tailored to the unique requirements of different industries. Our experience spans manufacturing, trading, services, apparel, poultry, export, and other specialized sectors.</p>
       </div>
@@ -756,10 +746,9 @@
   <section id="contact">
     <div class="wrap">
       <div class="cta-band reveal">
-        <div class="eyebrow">Let's talk</div>
         <h2 id="cms-cta-heading">Ready to get started?</h2>
         <p id="cms-cta-text">Tell us what you're working with — we'll help you find the right fit.</p>
-        <a href="https://www.auwion.com/contact.html" class="btn btn-dark" id="cms-cta-button">Get in touch</a>
+        <a href="https://www.auwion.com/contact.html#contact" class="btn btn-dark" id="cms-cta-button">Get in touch</a>
       </div>
     </div>
   </section>
@@ -770,7 +759,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="#top" class="wordmark">AUW<span>I</span>ON</a>
+        <a href="index.html" class="wordmark">AUW<span>I</span>ON</a>
         <p>Business Central, Zoho Books, and Odoo — implemented, supported, and extended by Auwion.</p>
         <div class="footer-contact">
           <a href="tel:+94711222528">+94 71 122 2528</a>
