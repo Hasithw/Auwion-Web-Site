@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Auwion Client Portal</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@400;500&display=swap');
 :root{
   --bg:#f0f4f8;--surface:#ffffff;--s2:#f1f5f9;--s3:#e8edf4;
   --border:#dde3ec;--b2:#c8d1de;
@@ -100,6 +100,46 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .req-cell.muted{color:var(--t2)}
 .req-cell.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
 .empty-state{text-align:center;padding:50px 20px;color:var(--t3);font-size:14px}
+/* public nav bar (shown on login/signup/forgot/etc, hidden once inside the app) — matches the main site header exactly */
+.public-nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,248,252,0.82);
+  backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid rgba(16,20,43,0.07);
+  padding:18px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.public-nav .wordmark{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;
+  letter-spacing:0.01em;text-decoration:none;color:#10142B;
+}
+.public-nav .wordmark span{
+  background:linear-gradient(90deg,#15024C,#0FA898);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.public-nav-links{display:none;align-items:center;gap:32px}
+@media(min-width:860px){.public-nav-links{display:flex}}
+.public-nav-links a{text-decoration:none;font-size:14px;font-weight:400;color:#4B5170;transition:color .15s ease}
+.public-nav-links a:hover,.public-nav-links a.current{color:#10142B}
+.public-nav-cta{
+  display:none;align-items:center;gap:8px;
+  font-size:14px;font-weight:600;color:#fff!important;
+  padding:11px 22px;border-radius:100px;
+  background:linear-gradient(90deg,#15024C,#0FA898);
+  transition:opacity .15s ease,transform .15s ease;
+}
+.public-nav-cta:hover{opacity:.9;transform:translateY(-1px);background:linear-gradient(90deg,#15024C,#0FA898)!important}
+@media(min-width:860px){.public-nav-cta{display:inline-flex}}
+.public-nav-menu-toggle{
+  display:inline-flex;background:none;border:1px solid rgba(16,20,43,0.12);
+  border-radius:100px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  letter-spacing:.08em;cursor:pointer;color:#10142B;
+}
+@media(min-width:860px){.public-nav-menu-toggle{display:none}}
+.public-nav-mobile{display:none;background:rgba(246,248,252,0.97);border-bottom:1px solid rgba(16,20,43,0.07);padding:0 28px}
+.public-nav-mobile.open{display:block}
+@media(min-width:860px){.public-nav-mobile{display:none!important}}
+.public-nav-mobile a{display:block;text-decoration:none;color:#10142B;font-size:15px;padding:12px 4px;border-bottom:1px solid rgba(16,20,43,0.07)}
+.public-nav-mobile a:last-child{border-bottom:none}
 .list-toolbar{display:flex;justify-content:flex-end;margin-bottom:2px}
 .list-toolbar .btn{width:auto}
 /* grouped list view */
@@ -170,6 +210,27 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+
+<!-- ══════════════════ PUBLIC NAV (hidden once signed in) ══════════════════ -->
+<div class="public-nav" id="publicNavBar">
+  <a href="index.html" class="wordmark">AUW<span>I</span>ON</a>
+  <div class="public-nav-links">
+    <a href="services.html">Services</a>
+    <a href="articles.html">Articles</a>
+    <a href="portal.html" class="current">Client login</a>
+    <a href="about.html#contact">Contact</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="about.html#contact" class="public-nav-cta">Get in touch</a>
+    <button class="public-nav-menu-toggle" aria-expanded="false" aria-controls="publicMobileNav" onclick="togglePublicMobileNav()">MENU</button>
+  </div>
+</div>
+<div class="public-nav-mobile" id="publicMobileNav">
+  <a href="services.html">Services</a>
+  <a href="articles.html">Articles</a>
+  <a href="portal.html">Client login</a>
+  <a href="about.html#contact">Contact</a>
+</div>
 
 <!-- ══════════════════ LOGIN ══════════════════ -->
 <div class="auth-wrap" id="loginScreen">
@@ -330,6 +391,12 @@ const KANBAN_COLUMNS = [
 ];
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+function togglePublicMobileNav(){
+  const el = document.getElementById('publicMobileNav');
+  const btn = document.querySelector('.public-nav-menu-toggle');
+  const open = el.classList.toggle('open');
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
 function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 // ── session storage ──────────────────────────────────────────────────
@@ -468,6 +535,7 @@ function hideAllAuth(){ ['loginScreen','forgotScreen','resetScreen','noAccessScr
 function logout(){
   clearSession();
   document.getElementById('app').classList.remove('show');
+  document.getElementById('publicNavBar').classList.remove('hidden');
   showLogin();
 }
 
@@ -490,6 +558,7 @@ async function boot(){
     hideAllAuth(); document.getElementById('noAccessScreen').classList.remove('hidden'); return;
   }
   hideAllAuth();
+  document.getElementById('publicNavBar').classList.add('hidden');
   document.getElementById('app').classList.add('show');
   document.getElementById('companyNameLabel').textContent = COMPANY;
   await loadAllData();
