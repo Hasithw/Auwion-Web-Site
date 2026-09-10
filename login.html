@@ -100,6 +100,8 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .req-cell.muted{color:var(--t2)}
 .req-cell.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
 .empty-state{text-align:center;padding:50px 20px;color:var(--t3);font-size:14px}
+.list-toolbar{display:flex;justify-content:flex-end;margin-bottom:2px}
+.list-toolbar .btn{width:auto}
 /* grouped list view */
 .list-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden}
 .list-hdr-row{display:grid;grid-template-columns:1fr 160px 160px;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.04em}
@@ -165,6 +167,7 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
   #toast{left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:none;text-align:center}
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -264,6 +267,9 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
       <div class="board-wrap" id="board-wrap"></div>
     </div>
     <div class="tab-panel" id="tab-list">
+      <div class="list-toolbar">
+        <button class="btn btn-sm" id="exportListBtn" onclick="exportListToExcel()">⬇ Export to Excel</button>
+      </div>
       <div id="list-view"></div>
     </div>
     <div class="tab-panel" id="tab-overview">
@@ -572,6 +578,37 @@ function renderList(){
       </div>
       ${groups || '<div class="board-col-empty">No requests</div>'}
     </div>`;
+}
+
+// ── Export the List view to an .xlsx file (client-side, via SheetJS) ──
+function exportListToExcel(){
+  if (typeof XLSX === 'undefined') { showToast('Export library failed to load — check your connection and refresh'); return; }
+  const all = [...DATA.dev, ...DATA.func, ...DATA.proj];
+  const byCol = {};
+  KANBAN_COLUMNS.forEach(c => byCol[c] = []);
+  all.forEach(r => {
+    const col = KANBAN_COLUMNS.includes(r.helpdesk_status) ? r.helpdesk_status : KANBAN_COLUMNS[0];
+    byCol[col].push(r);
+  });
+  const rows = [];
+  KANBAN_COLUMNS.filter(col => byCol[col].length).forEach(col => {
+    byCol[col].forEach(r => {
+      rows.push({
+        'Status': col,
+        'Ticket': r.description || 'Untitled request',
+        'Reported on': [r.month, r.year].filter(Boolean).join(' ') || '—',
+        'Assigned to': '—',
+      });
+    });
+  });
+  if (!rows.length) { showToast('Nothing to export yet'); return; }
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{wch:22},{wch:55},{wch:16},{wch:16}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Requests');
+  const company = (document.getElementById('companyNameLabel')?.textContent || 'Client').trim();
+  const stamp = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `${company.replace(/[^a-z0-9]+/gi,'-')}-requests-${stamp}.xlsx`);
 }
 
 // ── task detail drawer ──────────────────────────────────────────────
