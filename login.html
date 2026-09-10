@@ -550,8 +550,7 @@ function boardCardHtml(r){
 // ── List view (grouped by status) ────────────────────────────────────
 // "Reported on" uses month/year, the closest date info this app is given
 // (see PORTAL_COLUMNS above — there's no exact reported-on timestamp).
-// "Assigned to" isn't part of the exposed data either, so it's shown as
-// a dash for every row rather than guessing.
+// "Assigned to" shows the requester field when present, otherwise a dash.
 function renderList(){
   const all = [...DATA.dev, ...DATA.func, ...DATA.proj];
   const byCol = {};
@@ -566,7 +565,7 @@ function renderList(){
       <div class="list-row" onclick="openDrawer('${esc(r.id)}')">
         <div class="list-cell-ticket">${esc(r.description||'Untitled request')}</div>
         <div class="list-cell">${esc([r.month, r.year].filter(Boolean).join(' ') || '—')}</div>
-        <div class="list-cell">—</div>
+        <div class="list-cell">${esc(r.requester || '—')}</div>
       </div>`).join('')}
   `).join('');
   document.getElementById('list-view').innerHTML = `
@@ -597,7 +596,7 @@ function exportListToExcel(){
         'Status': col,
         'Ticket': r.description || 'Untitled request',
         'Reported on': [r.month, r.year].filter(Boolean).join(' ') || '—',
-        'Assigned to': '—',
+        'Assigned to': r.requester || '—',
       });
     });
   });
