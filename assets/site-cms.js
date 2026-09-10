@@ -570,7 +570,6 @@
     }
 
     // Article cards: Home shows 3 featured, Articles page shows all.
-    if (slug === 'home') loadArticleCards(3);
     if (slug === 'articles') loadArticleCards(null);
 
     // The 3 real article pages are keyed by a fixed data-cms-page slug.
