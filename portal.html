@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Auwion Client Portal</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@400;500&display=swap');
 :root{
   --bg:#f0f4f8;--surface:#ffffff;--s2:#f1f5f9;--s3:#e8edf4;
   --border:#dde3ec;--b2:#c8d1de;
@@ -61,7 +61,7 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .kpi-val{font-size:24px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent)}
 /* kanban board */
 .board-wrap{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
-.board-col{background:var(--s2);border:1px solid var(--border);border-radius:var(--rlg);flex:1 1 0;min-width:160px;display:flex;flex-direction:column;max-height:calc(100vh - 180px)}
+.board-col{background:var(--s2);border:1px solid var(--border);border-radius:var(--rlg);flex:0 0 300px;width:300px;display:flex;flex-direction:column;max-height:calc(100vh - 180px)}
 .board-col-hdr{padding:12px 14px;border-bottom:2px solid var(--b2);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0}
 .board-col-title{font-size:15px;font-weight:700;color:#1e293b;letter-spacing:normal}
 .board-col-count{font-size:11px;font-weight:700;color:var(--accent);background:var(--adim);border-radius:99px;padding:2px 9px;flex-shrink:0}
@@ -100,6 +100,48 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .req-cell.muted{color:var(--t2)}
 .req-cell.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
 .empty-state{text-align:center;padding:50px 20px;color:var(--t3);font-size:14px}
+/* public nav bar (shown on login/signup/forgot/etc, hidden once inside the app) — matches the main site header exactly */
+.public-nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,248,252,0.82);
+  backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid rgba(16,20,43,0.07);
+  padding:18px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.public-nav .wordmark{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;
+  letter-spacing:0.01em;text-decoration:none;color:#10142B;
+}
+.public-nav .wordmark span{
+  background:linear-gradient(90deg,#15024C,#0FA898);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.public-nav-links{display:none;align-items:center;gap:32px}
+@media(min-width:860px){.public-nav-links{display:flex}}
+.public-nav-links a{text-decoration:none;font-size:14px;font-weight:400;color:#4B5170;transition:color .15s ease}
+.public-nav-links a:hover,.public-nav-links a.current{color:#10142B}
+.public-nav-cta{
+  display:none;align-items:center;gap:8px;
+  font-size:14px;font-weight:600;color:#fff!important;
+  padding:11px 22px;border-radius:100px;
+  background:linear-gradient(90deg,#15024C,#0FA898);
+  transition:opacity .15s ease,transform .15s ease;
+}
+.public-nav-cta:hover{opacity:.9;transform:translateY(-1px);background:linear-gradient(90deg,#15024C,#0FA898)!important}
+@media(min-width:860px){.public-nav-cta{display:inline-flex}}
+.public-nav-menu-toggle{
+  display:inline-flex;background:none;border:1px solid rgba(16,20,43,0.12);
+  border-radius:100px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  letter-spacing:.08em;cursor:pointer;color:#10142B;
+}
+@media(min-width:860px){.public-nav-menu-toggle{display:none}}
+.public-nav-mobile{display:none;background:rgba(246,248,252,0.97);border-bottom:1px solid rgba(16,20,43,0.07);padding:0 28px}
+.public-nav-mobile.open{display:block}
+@media(min-width:860px){.public-nav-mobile{display:none!important}}
+.public-nav-mobile a{display:block;text-decoration:none;color:#10142B;font-size:15px;padding:12px 4px;border-bottom:1px solid rgba(16,20,43,0.07)}
+.public-nav-mobile a:last-child{border-bottom:none}
+.list-toolbar{display:flex;justify-content:flex-end;margin-bottom:2px}
+.list-toolbar .btn{width:auto}
 /* grouped list view */
 .list-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden}
 .list-hdr-row{display:grid;grid-template-columns:1fr 160px 160px;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.04em}
@@ -165,8 +207,32 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
   #toast{left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:none;text-align:center}
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+
+<!-- ══════════════════ PUBLIC NAV (hidden once signed in) ══════════════════ -->
+<div class="public-nav" id="publicNavBar">
+  <a href="index.html" class="wordmark">AUW<span>I</span>ON</a>
+  <div class="public-nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-us.html">About Us</a>
+    <a href="services.html">Services</a>
+    <a href="index.html#industries">Industries</a>
+    <a href="portal.html" class="current">Client login</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="about.html#contact" class="public-nav-cta">Get in touch</a>
+    <button class="public-nav-menu-toggle" aria-expanded="false" aria-controls="publicMobileNav" onclick="togglePublicMobileNav()">MENU</button>
+  </div>
+</div>
+<div class="public-nav-mobile" id="publicMobileNav">
+  <a href="index.html">Home</a>
+  <a href="about-us.html">About Us</a>
+  <a href="services.html">Services</a>
+  <a href="index.html#industries">Industries</a>
+  <a href="portal.html">Client login</a>
+</div>
 
 <!-- ══════════════════ LOGIN ══════════════════ -->
 <div class="auth-wrap" id="loginScreen">
@@ -264,6 +330,9 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
       <div class="board-wrap" id="board-wrap"></div>
     </div>
     <div class="tab-panel" id="tab-list">
+      <div class="list-toolbar">
+        <button class="btn btn-sm" id="exportListBtn" onclick="exportListToExcel()">⬇ Export to Excel</button>
+      </div>
       <div id="list-view"></div>
     </div>
     <div class="tab-panel" id="tab-overview">
@@ -324,6 +393,12 @@ const KANBAN_COLUMNS = [
 ];
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+function togglePublicMobileNav(){
+  const el = document.getElementById('publicMobileNav');
+  const btn = document.querySelector('.public-nav-menu-toggle');
+  const open = el.classList.toggle('open');
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
 function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 // ── session storage ──────────────────────────────────────────────────
@@ -462,6 +537,7 @@ function hideAllAuth(){ ['loginScreen','forgotScreen','resetScreen','noAccessScr
 function logout(){
   clearSession();
   document.getElementById('app').classList.remove('show');
+  document.getElementById('publicNavBar').classList.remove('hidden');
   showLogin();
 }
 
@@ -484,6 +560,7 @@ async function boot(){
     hideAllAuth(); document.getElementById('noAccessScreen').classList.remove('hidden'); return;
   }
   hideAllAuth();
+  document.getElementById('publicNavBar').classList.add('hidden');
   document.getElementById('app').classList.add('show');
   document.getElementById('companyNameLabel').textContent = COMPANY;
   await loadAllData();
@@ -544,8 +621,7 @@ function boardCardHtml(r){
 // ── List view (grouped by status) ────────────────────────────────────
 // "Reported on" uses month/year, the closest date info this app is given
 // (see PORTAL_COLUMNS above — there's no exact reported-on timestamp).
-// "Assigned to" isn't part of the exposed data either, so it's shown as
-// a dash for every row rather than guessing.
+// "Assigned to" shows the requester field when present, otherwise a dash.
 function renderList(){
   const all = [...DATA.dev, ...DATA.func, ...DATA.proj];
   const byCol = {};
@@ -560,7 +636,7 @@ function renderList(){
       <div class="list-row" onclick="openDrawer('${esc(r.id)}')">
         <div class="list-cell-ticket">${esc(r.description||'Untitled request')}</div>
         <div class="list-cell">${esc([r.month, r.year].filter(Boolean).join(' ') || '—')}</div>
-        <div class="list-cell">—</div>
+        <div class="list-cell">${esc(r.requester || '—')}</div>
       </div>`).join('')}
   `).join('');
   document.getElementById('list-view').innerHTML = `
@@ -572,6 +648,37 @@ function renderList(){
       </div>
       ${groups || '<div class="board-col-empty">No requests</div>'}
     </div>`;
+}
+
+// ── Export the List view to an .xlsx file (client-side, via SheetJS) ──
+function exportListToExcel(){
+  if (typeof XLSX === 'undefined') { showToast('Export library failed to load — check your connection and refresh'); return; }
+  const all = [...DATA.dev, ...DATA.func, ...DATA.proj];
+  const byCol = {};
+  KANBAN_COLUMNS.forEach(c => byCol[c] = []);
+  all.forEach(r => {
+    const col = KANBAN_COLUMNS.includes(r.helpdesk_status) ? r.helpdesk_status : KANBAN_COLUMNS[0];
+    byCol[col].push(r);
+  });
+  const rows = [];
+  KANBAN_COLUMNS.filter(col => byCol[col].length).forEach(col => {
+    byCol[col].forEach(r => {
+      rows.push({
+        'Status': col,
+        'Ticket': r.description || 'Untitled request',
+        'Reported on': [r.month, r.year].filter(Boolean).join(' ') || '—',
+        'Assigned to': r.requester || '—',
+      });
+    });
+  });
+  if (!rows.length) { showToast('Nothing to export yet'); return; }
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{wch:22},{wch:55},{wch:16},{wch:16}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Requests');
+  const company = (document.getElementById('companyNameLabel')?.textContent || 'Client').trim();
+  const stamp = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `${company.replace(/[^a-z0-9]+/gi,'-')}-requests-${stamp}.xlsx`);
 }
 
 // ── task detail drawer ──────────────────────────────────────────────
