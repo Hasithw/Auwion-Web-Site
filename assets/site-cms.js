@@ -152,8 +152,8 @@
 
   // ---------------------------------------------------------------------
   // Service sub-block icons — extracted verbatim from the original
-  // hand-coded SVGs on business-central.html / zoho-books.html / odoo.html
-  // / web-development.html. Confirmed identical paths were reused across
+  // hand-coded SVGs on business-central.html / zoho-books.html / odoo.html.
+  // Confirmed identical paths were reused across
   // pages for "implementation", "support", and "bookkeeping" — so those
   // three are shared here too, rather than duplicated per page.
   // ---------------------------------------------------------------------
@@ -184,7 +184,7 @@
 
   // ---------------------------------------------------------------------
   // Renders the anchor-nav pills + sub-block list on a service detail
-  // page (Business Central / Zoho Books / Odoo / Web development), from
+  // page (Business Central / Zoho Books / Odoo), from
   // the services + service_blocks tables. Alternating left/right layout
   // is preserved by flipping direction on odd indices, matching the
   // original hand-coded pattern exactly.
@@ -414,7 +414,6 @@
     'business-central': applyServiceDetailContent,
     'zoho-books': applyServiceDetailContent,
     odoo: applyServiceDetailContent,
-    'web-development': applyServiceDetailContent,
     bookkeeping: applyBookkeepingContent,
     about: applyAboutContent,
     privacy: applyLegalContent,
@@ -422,7 +421,7 @@
   };
 
   // ---------------------------------------------------------------------
-  // Services (overview) page — just the intro copy; the 5 service rows
+  // Services (overview) page — just the intro copy; the 4 service rows
   // themselves belong to the Services collection, not page content.
   // ---------------------------------------------------------------------
   function applyServicesContent(content) {
@@ -433,7 +432,7 @@
   }
 
   // ---------------------------------------------------------------------
-  // Business Central / Zoho Books / Odoo / Web development — identical
+  // Business Central / Zoho Books / Odoo — identical
   // shape, shared renderer.
   // ---------------------------------------------------------------------
   function applyServiceDetailContent(content) {
@@ -564,9 +563,9 @@
     // run on any page that has the matching container elements —
     // loadServicesTable() only does anything on Home/Services (which
     // have #cms-services-table), and loadServiceBlocks() only on the
-    // 4 service detail pages (which have #cms-subblocks).
+    // 3 service detail pages (which have #cms-subblocks).
     loadServicesTable();
-    if (slug === 'business-central' || slug === 'zoho-books' || slug === 'odoo' || slug === 'web-development') {
+    if (slug === 'business-central' || slug === 'zoho-books' || slug === 'odoo') {
       loadServiceBlocks(slug);
     }
 
