@@ -17,12 +17,12 @@
 // <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 // <script src="assets/admin-client.js"></script>
 
-// This points at your real, connected Supabase project ("Auwion Site",
-// ref stodwjjgqzsqjnskyyka) — NOT the placeholder URL/key that ship in
+// This points at your real, connected Supabase project ("Auwion Web Site",
+// ref fhlvcxyrutqxsqoyqpsj) — NOT the placeholder URL/key that ship in
 // the public site's assets/supabase-client.js, which were left untouched
 // per your instruction and remain disconnected from any real backend.
-const ADMIN_SUPABASE_URL = "https://stodwjjgqzsqjnskyyka.supabase.co";
-const ADMIN_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0b2R3ampncXpzcWpuc2t5eWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDM2NDIsImV4cCI6MjEwMjUxOTY0Mn0.E9vXhxFvmpsfki8iZhtOyhn-X-mOgXXpUaEdgLiAnZA";
+const ADMIN_SUPABASE_URL = "https://fhlvcxyrutqxsqoyqpsj.supabase.co";
+const ADMIN_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobHZjeHlydXRxeHNxb3lxcHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNDg3MjIsImV4cCI6MjEwNDYyNDcyMn0.EqPss_BMlHoX8MDuB9a0clFTByrvK53lSymvxh3nvQs";
 
 // A distinct storageKey keeps an admin session and a client-portal session
 // (from login.html) from ever colliding if both are ever opened by the same
