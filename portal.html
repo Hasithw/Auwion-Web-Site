@@ -63,9 +63,10 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .board-wrap{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
 .board-col{background:var(--s2);border:1px solid var(--border);border-radius:var(--rlg);flex:1 1 0;min-width:160px;display:flex;flex-direction:column;max-height:calc(100vh - 180px)}
 .board-col-hdr{padding:12px 14px;border-bottom:2px solid var(--b2);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0}
-.board-col-title{font-size:12px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.04em}
+.board-col-title{font-size:15px;font-weight:700;color:#1e293b;letter-spacing:normal}
 .board-col-count{font-size:11px;font-weight:700;color:var(--accent);background:var(--adim);border-radius:99px;padding:2px 9px;flex-shrink:0}
-.board-col-body{overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;flex:1}
+.board-col-body{overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;flex:1;scrollbar-width:none;-ms-overflow-style:none}
+.board-col-body::-webkit-scrollbar{display:none}
 .board-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 2px rgba(15,23,42,.04);cursor:pointer;transition:box-shadow .15s,border-color .15s}
 .board-card:hover{box-shadow:0 2px 8px rgba(15,23,42,.09);border-color:var(--accent)}
 /* task detail drawer */
@@ -86,8 +87,8 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .drawer-amounts .drawer-field-val{font-family:'JetBrains Mono',monospace;font-size:15px}
 .drawer-amount-full{grid-column:1/-1;border-top:1px dashed var(--border);padding-top:10px;margin-top:2px}
 .drawer-amount-full .drawer-field-val{font-size:18px;color:var(--accent)}
-.board-card-desc{font-size:12.5px;font-weight:600;line-height:1.35;color:var(--text)}
-.board-card-meta{font-size:10.5px;color:var(--t3);display:flex;flex-wrap:wrap;gap:4px 8px}
+.board-card-desc{font-size:14px;font-weight:700;line-height:1.4;color:#1e293b}
+.board-card-meta{font-size:12px;color:var(--accent);font-weight:500;display:flex;flex-wrap:wrap;gap:4px 8px}
 .board-col-empty{font-size:11px;color:var(--t3);text-align:center;padding:16px 8px;font-style:italic}
 /* table-style list */
 .section-title{font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
@@ -99,6 +100,16 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .req-cell.muted{color:var(--t2)}
 .req-cell.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
 .empty-state{text-align:center;padding:50px 20px;color:var(--t3);font-size:14px}
+/* grouped list view */
+.list-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden}
+.list-hdr-row{display:grid;grid-template-columns:1fr 160px 160px;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.04em}
+.list-group-hdr{padding:10px 16px;background:#eef2f7;font-size:12.5px;font-weight:700;color:#1e293b;border-bottom:1px solid var(--border);border-top:1px solid var(--border)}
+.list-group-hdr:first-of-type{border-top:none}
+.list-row{display:grid;grid-template-columns:1fr 160px 160px;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:background .12s}
+.list-row:hover{background:var(--s2)}
+.list-row:last-child{border-bottom:none}
+.list-cell-ticket{font-size:13.5px;color:var(--accent);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-cell{font-size:13px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* ── tablet ── */
 @media(max-width:900px){
   .main{padding:18px 14px 50px}
@@ -125,6 +136,8 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
   .board-col-hdr{padding:11px 12px}
   .board-card{padding:11px 12px}
   .req-row{grid-template-columns:1fr;gap:2px;padding:12px 14px}
+  .list-hdr-row{display:none}
+  .list-row{grid-template-columns:1fr;gap:2px;padding:12px 14px}
   .req-row.head{display:none}
   .req-cell{white-space:normal}
   .req-cell::before{content:attr(data-label);display:block;font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
@@ -244,10 +257,14 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
   </div>
   <div class="nav-tabs" id="navTabs">
     <div class="nav-tab active" data-tab="board">Board</div>
+    <div class="nav-tab" data-tab="list">List</div>
   </div>
   <div class="main">
     <div class="tab-panel active" id="tab-board">
       <div class="board-wrap" id="board-wrap"></div>
+    </div>
+    <div class="tab-panel" id="tab-list">
+      <div id="list-view"></div>
     </div>
     <div class="tab-panel" id="tab-overview">
       <div class="kpi-grid" id="overview-kpis"></div>
@@ -487,7 +504,7 @@ async function loadAllData(){
       )
     );
     DATA.dev = Array.isArray(dev)?dev:[]; DATA.func = Array.isArray(func)?func:[]; DATA.proj = Array.isArray(proj)?proj:[];
-    renderBoard(); renderOverview(); renderCategory('dev'); renderCategory('func'); renderCategory('proj');
+    renderBoard(); renderList(); renderOverview(); renderCategory('dev'); renderCategory('func'); renderCategory('proj');
   }catch(e){ showToast('Failed to load your data — try refreshing'); console.error(e); }
 }
 
@@ -522,6 +539,39 @@ function boardCardHtml(r){
     <div class="board-card-desc">${esc(r.description||'Untitled request')}</div>
     ${meta.length ? `<div class="board-card-meta">${meta.map(m=>`<span>${m}</span>`).join('')}</div>` : ''}
   </div>`;
+}
+
+// ── List view (grouped by status) ────────────────────────────────────
+// "Reported on" uses month/year, the closest date info this app is given
+// (see PORTAL_COLUMNS above — there's no exact reported-on timestamp).
+// "Assigned to" isn't part of the exposed data either, so it's shown as
+// a dash for every row rather than guessing.
+function renderList(){
+  const all = [...DATA.dev, ...DATA.func, ...DATA.proj];
+  const byCol = {};
+  KANBAN_COLUMNS.forEach(c => byCol[c] = []);
+  all.forEach(r => {
+    const col = KANBAN_COLUMNS.includes(r.helpdesk_status) ? r.helpdesk_status : KANBAN_COLUMNS[0];
+    byCol[col].push(r);
+  });
+  const groups = KANBAN_COLUMNS.filter(col => byCol[col].length).map(col => `
+    <div class="list-group-hdr">${esc(col)}</div>
+    ${byCol[col].map(r => `
+      <div class="list-row" onclick="openDrawer('${esc(r.id)}')">
+        <div class="list-cell-ticket">${esc(r.description||'Untitled request')}</div>
+        <div class="list-cell">${esc([r.month, r.year].filter(Boolean).join(' ') || '—')}</div>
+        <div class="list-cell">—</div>
+      </div>`).join('')}
+  `).join('');
+  document.getElementById('list-view').innerHTML = `
+    <div class="list-table">
+      <div class="list-hdr-row">
+        <div>Ticket</div>
+        <div>Reported on</div>
+        <div>Assigned to</div>
+      </div>
+      ${groups || '<div class="board-col-empty">No requests</div>'}
+    </div>`;
 }
 
 // ── task detail drawer ──────────────────────────────────────────────

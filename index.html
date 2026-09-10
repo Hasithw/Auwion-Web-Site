@@ -257,7 +257,7 @@
 
   .services-grid{display:grid;grid-template-columns:1fr;gap:18px;}
   @media(min-width:640px){.services-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(min-width:1020px){.services-grid{grid-template-columns:repeat(4,1fr);}}
+  @media(min-width:1020px){.services-grid{grid-template-columns:repeat(3,1fr);}}
   .service-card{
     display:flex;flex-direction:column;gap:14px;height:100%;
     background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px 22px;
@@ -664,11 +664,6 @@
           <p>Track project costs, subcontractors, and equipment in real time, with job costing built directly into your financials.</p>
         </div>
         <div class="industry-card">
-          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg></div>
-          <h3>Engineering</h3>
-          <p>Manage projects, resources, and change orders with full visibility from design through delivery.</p>
-        </div>
-        <div class="industry-card">
           <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 3 4 1.5-1.5 3L21 12l-2.5 1.5L20 17l-4 1.5-1 3H9l-1-3-4-1.5 1.5-3L4 12l2.5-1.5L5 7.5 9 6Z"/><path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z"/></svg></div>
           <h3>Apparel &amp; Garment</h3>
           <p>Handle style, size, and colour matrices, seasonal planning, and multi-stage production in one system.</p>
@@ -694,16 +689,6 @@
           <p>Schedule resources, track billable time, and manage contracts and service agreements end to end.</p>
         </div>
         <div class="industry-card">
-          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6l-1 7h2l-6 13 1-9H9z"/></svg></div>
-          <h3>Distilleries &amp; Beverage</h3>
-          <p>Manage batch production, aging, licensing, and excise compliance alongside your day-to-day operations.</p>
-        </div>
-        <div class="industry-card">
-          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a4 4 0 0 1-4 4H9l-4 3 1-4a5 5 0 0 1-2-4 5 5 0 0 1 5-5h3a4 4 0 0 1 4 4v2Z"/><path d="M17 8h1a3 3 0 0 1 3 3v1"/><circle cx="8.5" cy="7.5" r=".6" fill="#0FA898"/></svg></div>
-          <h3>Poultry &amp; Agriculture</h3>
-          <p>Track flocks, feed, yields, and seasonal cycles with traceability from farm to sale.</p>
-        </div>
-        <div class="industry-card">
           <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 7H6.2"/></svg></div>
           <h3>Retail Wholesale</h3>
           <p>Unify POS, inventory, and wholesale pricing so stock and margins stay accurate across channels.</p>
@@ -712,11 +697,6 @@
           <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2 0 3.5-1.5 3.5-3.5S14 5 12 5s-3.5 1.5-3.5 3.5S10 12 12 12Z"/><path d="M12 12c-2 0-3.5 1.5-3.5 3.5S10 19 12 19s3.5-1.5 3.5-3.5S14 12 12 12Z"/><path d="M12 12c0-2-1.5-3.5-3.5-3.5S5 10 5 12s1.5 3.5 3.5 3.5" /><path d="M12 12c0-2 1.5-3.5 3.5-3.5S19 10 19 12s-1.5 3.5-3.5 3.5"/><path d="M12 12v8"/></svg></div>
           <h3>Floral &amp; Event Management</h3>
           <p>Coordinate orders, perishable inventory, and event logistics without losing track of the details.</p>
-        </div>
-        <div class="industry-card">
-          <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>
-          <h3>Energy Services</h3>
-          <p>Manage field service, assets, and long-term contracts with the reporting your stakeholders expect.</p>
         </div>
       </div>
     </div>
