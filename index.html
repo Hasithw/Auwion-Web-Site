@@ -416,10 +416,20 @@
 
   /* ---------- CTA band ---------- */
   .cta-band{
-    background:var(--grad);color:#fff;border-radius:20px;padding:56px 40px;text-align:center;margin:0 auto;
+    position:relative;
+    background:#fff;border:1px solid var(--border);
+    box-shadow:0 24px 60px -24px rgba(15,168,152,0.35), 0 10px 30px -10px rgba(21,2,76,0.12);
+    border-radius:24px;padding:64px 40px;text-align:center;margin:0 auto;
   }
-  .cta-band h2{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.2vw,32px);margin:0 0 12px;}
-  .cta-band p{margin:0 0 28px;color:rgba(255,255,255,0.85);font-size:16px;}
+  .cta-band .eyebrow{justify-content:center;margin:0 0 18px;}
+  .cta-band h2{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.2vw,32px);margin:0 0 12px;color:var(--text);}
+  .cta-band p{margin:0 0 30px;color:var(--text-soft);font-size:16px;}
+  .cta-band .btn-dark{
+    border-color:transparent;background:var(--grad);color:#fff;
+    box-shadow:0 14px 32px -10px rgba(15,168,152,0.55);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .cta-band .btn-dark:hover{transform:translateY(-2px);box-shadow:0 18px 38px -8px rgba(15,168,152,0.65);opacity:1;}
 
   /* ---------- Footer ---------- */
   footer{border-top:1px solid var(--border-soft);padding:60px 0 30px;background:var(--bg-2);}
@@ -746,6 +756,7 @@
   <section id="contact">
     <div class="wrap">
       <div class="cta-band reveal">
+        <div class="eyebrow">Let's talk</div>
         <h2 id="cms-cta-heading">Ready to get started?</h2>
         <p id="cms-cta-text">Tell us what you're working with — we'll help you find the right fit.</p>
         <a href="https://www.auwion.com/contact.html" class="btn btn-dark" id="cms-cta-button">Get in touch</a>
