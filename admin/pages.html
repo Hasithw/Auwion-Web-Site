@@ -56,12 +56,12 @@
         container.innerHTML = renderStateBlock({
           icon: 'pages',
           title: 'No pages yet',
-          description: 'Page content management (editing Home, About, Business Central, Zoho Books, Odoo, Web Development, Book Keeping, Privacy Policy, and Terms) is coming in the next step.',
+          description: 'Page content management (editing Home, About, Business Central, Zoho Books, Odoo, Book Keeping, Privacy Policy, and Terms) is coming in the next step.',
         });
         return;
       }
 
-      const PAGES_WITH_FULL_EDITOR = ['home', 'services', 'business-central', 'zoho-books', 'odoo', 'web-development', 'bookkeeping', 'about', 'privacy', 'terms'];
+      const PAGES_WITH_FULL_EDITOR = ['home', 'services', 'business-central', 'zoho-books', 'odoo', 'bookkeeping', 'about', 'privacy', 'terms'];
 
       const rows = data.map(function (p) {
         const badge = p.status === 'published' ? 'badge-published' : 'badge-draft';
