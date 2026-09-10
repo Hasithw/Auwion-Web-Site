@@ -124,9 +124,6 @@
       radial-gradient(ellipse 600px 500px at 85% 20%, rgba(15,168,152,0.26), transparent 60%),
       linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
   }
-  .hero-wave{
-    position:absolute;left:0;right:0;bottom:-2px;width:100%;height:auto;z-index:1;opacity:0.85;
-  }
   .hero-lines{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0.55;}
   .eyebrow{
     font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
@@ -499,15 +496,6 @@
         <circle cx="980" cy="70" r="3"/>
         <circle cx="1060" cy="10" r="3.5"/>
       </g>
-    </svg>
-    <svg class="hero-wave" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#8A81A6" stop-opacity="0.35"/>
-          <stop offset="100%" stop-color="#15024C" stop-opacity="0.30"/>
-        </linearGradient>
-      </defs>
-      <path fill="url(#waveGrad)" d="M0,120 C240,60 360,180 600,110 C840,40 960,160 1200,100 C1320,70 1400,90 1440,100 L1440,220 L0,220 Z"/>
     </svg>
 
     <div class="wrap">
