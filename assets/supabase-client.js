@@ -77,8 +77,8 @@ async function auwionResetPassword({ email }) {
 // portal access. They're intentionally different projects — do not merge
 // these back into one client/URL, or login and portal ticket fetching
 // will silently break.
-const CONTACT_SUPABASE_URL = "https://stodwjjgqzsqjnskyyka.supabase.co";
-const CONTACT_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0b2R3ampncXpzcWpuc2t5eWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDM2NDIsImV4cCI6MjEwMjUxOTY0Mn0.E9vXhxFvmpsfki8iZhtOyhn-X-mOgXXpUaEdgLiAnZA";
+const CONTACT_SUPABASE_URL = "https://fhlvcxyrutqxsqoyqpsj.supabase.co";
+const CONTACT_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobHZjeHlydXRxeHNxb3lxcHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNDg3MjIsImV4cCI6MjEwNDYyNDcyMn0.EqPss_BMlHoX8MDuB9a0clFTByrvK53lSymvxh3nvQs";
 const contactSupabaseClient = window.supabase.createClient(CONTACT_SUPABASE_URL, CONTACT_SUPABASE_ANON_KEY);
 
 async function auwionSendMessage({ fullName, email, phone, companyName, interestedIn, message }) {
