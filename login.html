@@ -554,10 +554,9 @@ async function boot(){
   }catch(e){
     hideAllAuth(); document.getElementById('noAccessScreen').classList.remove('hidden'); return;
   }
-  hideAllAuth();
-  document.getElementById('app').classList.add('show');
-  document.getElementById('companyNameLabel').textContent = COMPANY;
-  await loadAllData();
+  // Login verified (active client account) — hand off to the external
+  // client portal instead of rendering the built-in board on this page.
+  window.location.href = 'https://hasithw.github.io/Invoice-Follow-Up/';
 }
 
 // Fetches ONLY from the locked-down portal_* views (see client-portal-
