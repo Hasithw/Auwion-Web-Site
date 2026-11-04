@@ -418,6 +418,25 @@
     background:rgba(255,255,255,0.03);color:var(--text);font-size:14px;font-family:var(--font-body);
   }
 
+
+  /* ---------- Article pages: dark purple background ---------- */
+  main.article-dark{
+    background:linear-gradient(170deg, #14024B 0%, #120443 50%, #0D0632 100%);
+    min-height:80vh;padding-bottom:90px;
+    --text:#FFFFFF;
+    --text-soft:rgba(255,255,255,0.74);
+    --text-dim:rgba(255,255,255,0.52);
+    --border:rgba(255,255,255,0.14);
+    --border-soft:rgba(255,255,255,0.08);
+    --card:rgba(255,255,255,0.05);
+    --card-strong:rgba(255,255,255,0.10);
+    color:var(--text);
+  }
+  main.article-dark h1, main.article-dark h2, main.article-dark h3, main.article-dark strong{color:#fff;}
+  main.article-dark a:not(.btn){color:var(--teal-soft);}
+  main.article-dark .breadcrumb, main.article-dark .breadcrumb a{color:rgba(255,255,255,0.55);}
+  main.article-dark .hero-img{background:rgba(255,255,255,0.04);}
+  main.article-dark .inline-cta{background:linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));}
 </style>
 </head>
 <body data-cms-page="bc-migration">
@@ -448,7 +467,7 @@
   </div>
 </header>
 
-<main>
+<main class="article-dark">
   <section style="padding-top:60px;">
     <div class="wrap article-full" id="cms-article-detail">
       <div class="breadcrumb"><a href="index.html">Home</a> / <a href="articles.html">Articles</a> / Article</div>
