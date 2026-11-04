@@ -33,7 +33,7 @@
 <body>
 <header>
   <h1>Article banner maker</h1>
-  <p>Type the article title, add a photo or screenshot, then download the banner (1200 × 630 PNG) and save it in your site's <code>images/articles/</code> folder.</p>
+  <p>Type the article title, add a photo or screenshot, then download the banner (1200 × 540 PNG) and upload it under <b>Articles page banner</b> in the article editor.</p>
 </header>
 
 <div class="wrap">
@@ -63,13 +63,13 @@
   </div>
 
   <div class="preview">
-    <canvas id="c" width="1200" height="630"></canvas>
-    <div class="size">1200 × 630 px — also the right size for LinkedIn / Facebook link previews.</div>
+    <canvas id="c" width="1200" height="540"></canvas>
+    <div class="size">1200 × 540 px — the same 20 : 9 shape as the cards on the Articles page, so nothing gets cut off.</div>
   </div>
 </div>
 
 <script>
-const W = 1200, H = 630;
+const W = 1200, H = 540;
 const c = document.getElementById('c');
 const ctx = c.getContext('2d');
 const $ = id => document.getElementById(id);
@@ -134,10 +134,10 @@ function draw() {
   ctx.fillStyle = '#fff';
   ctx.font = '800 34px Inter, sans-serif';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillText('AUWION', pad, 108);
+  ctx.fillText('AUWION', pad, 92);
   ctx.fillStyle = 'rgba(255,255,255,0.55)';
   ctx.font = '500 13px Inter, sans-serif';
-  ctx.fillText('BUSINESS CENTRAL  ·  ERP  ·  FINANCE', pad, 134);
+  ctx.fillText('BUSINESS CENTRAL  ·  ERP  ·  FINANCE', pad, 118);
 
   // title
   const maxW = leftW - pad * 2;
@@ -146,11 +146,11 @@ function draw() {
     ctx.font = `700 ${size}px Inter, sans-serif`;
     lines = wrapLines($('title').value || 'Article title', maxW);
     size -= 2;
-  } while ((lines.length > 4 || lines.length * size * 1.25 > 260) && size > 26);
+  } while ((lines.length > 4 || lines.length * size * 1.25 > 200) && size > 26);
   size += 2;
   const lh = Math.round(size * 1.25);
   const blockH = lines.length * lh;
-  let y = Math.max(250, (H + 120 - blockH) / 2);
+  let y = Math.max(225, (H + 110 - blockH) / 2);
 
   // tag + accent
   const tag = $('tag').value.trim().toUpperCase();
@@ -167,7 +167,7 @@ function draw() {
   // footer url
   ctx.fillStyle = 'rgba(255,255,255,0.45)';
   ctx.font = '500 14px Inter, sans-serif';
-  ctx.fillText('auwion.com', pad, H - 56);
+  ctx.fillText('auwion.com', pad, H - 44);
 }
 
 $('photo').addEventListener('change', e => {
