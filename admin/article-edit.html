@@ -131,12 +131,17 @@
 
   <div class="fieldset">
     <h3>Content</h3>
-    <div class="ac-field">
-      <label for="artIntro">Intro paragraph</label>
-      <textarea id="artIntro" rows="3"></textarea>
+    <p style="font-size:12px;color:var(--text-dim);margin:0 0 10px;">
+      Write the article here. Press <b>Enter</b> for a new paragraph. Use the toolbar for subtitles, font, text size,
+      colour, alignment, lists, links and images. The box shows the article's dark background so colours look the same as on the site.
+    </p>
+    <div id="artBodyEditor"></div>
+    <div id="artWordCount" style="font-size:12px;color:var(--text-dim);margin-top:8px;font-family:var(--font-mono);"></div>
+    <!-- Old plain-text fields: kept hidden so older articles still load into the editor -->
+    <div style="display:none;">
+      <textarea id="artIntro"></textarea>
+      <div id="sectionsList"></div>
     </div>
-    <div id="sectionsList"></div>
-    <button type="button" class="btn btn-secondary btn-sm" onclick="addSection()">+ Add section</button>
   </div>
 
   <div class="fieldset">
@@ -176,6 +181,39 @@
   </div>
 </div>
 
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<style>
+  /* ---------- Rich text editor (Article body) ---------- */
+  #artBodyEditor{min-height:420px;}
+  .ql-toolbar.ql-snow{border-radius:10px 10px 0 0;background:#fff;border-color:var(--border, #ddd);position:sticky;top:0;z-index:5;}
+  .ql-container.ql-snow{border-radius:0 0 10px 10px;border-color:var(--border, #ddd);
+    background:linear-gradient(170deg,#14024B 0%,#120443 50%,#0D0632 100%);}
+  .ql-editor{min-height:420px;color:rgba(255,255,255,0.86);font-family:Inter,sans-serif;font-size:16px;line-height:1.8;padding:28px 32px;}
+  .ql-editor.ql-blank::before{color:rgba(255,255,255,0.4);font-style:normal;}
+  .ql-editor p{margin:0 0 14px;}
+  .ql-editor h2{color:#fff;font-family:'Space Grotesk',sans-serif;font-size:24px;margin:28px 0 12px;}
+  .ql-editor h3{color:#fff;font-family:'Space Grotesk',sans-serif;font-size:19px;margin:22px 0 10px;}
+  .ql-editor h4{color:#45C9BB;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:18px 0 8px;}
+  .ql-editor blockquote{border-left:3px solid #0FA898 !important;color:#fff;}
+  .ql-editor a{color:#45C9BB;}
+  .ql-editor img{border-radius:10px;}
+  /* font + size picker labels */
+  .ql-snow .ql-picker.ql-font{width:130px;}
+  .ql-snow .ql-picker.ql-size{width:78px;}
+  .ql-snow .ql-picker.ql-font .ql-picker-label::before,.ql-snow .ql-picker.ql-font .ql-picker-item::before{content:'Default font';}
+  .ql-snow .ql-picker.ql-font [data-value="Inter"]::before{content:'Inter' !important;font-family:Inter;}
+  .ql-snow .ql-picker.ql-font [data-value="Space Grotesk"]::before{content:'Space Grotesk' !important;font-family:'Space Grotesk';}
+  .ql-snow .ql-picker.ql-font [data-value="IBM Plex Mono"]::before{content:'Plex Mono' !important;font-family:'IBM Plex Mono';}
+  .ql-snow .ql-picker.ql-font [data-value="Georgia"]::before{content:'Georgia' !important;font-family:Georgia;}
+  .ql-snow .ql-picker.ql-size .ql-picker-label::before,.ql-snow .ql-picker.ql-size .ql-picker-item::before{content:'Size';}
+  .ql-snow .ql-picker.ql-size [data-value]::before{content:attr(data-value) !important;}
+  .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before{content:'Subtitle';}
+  .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before{content:'Small subtitle';}
+  .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before{content:'Label';}
+  .ql-snow .ql-picker.ql-header .ql-picker-label:not([data-value])::before,.ql-snow .ql-picker.ql-header .ql-picker-item:not([data-value])::before{content:'Paragraph';}
+  .ql-snow .ql-picker.ql-header{width:118px;}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/admin-client.js"></script>
 <script src="assets/admin-ui.js"></script>
@@ -210,6 +248,7 @@
       currentArticle = { id: null, title: '', slug: '', tag: 'Business Central', read_time: '', byline: 'By Auwion team', hero_icon_key: 'implementation', related_service_id: '', seo_title: '', seo_description: '', status: 'draft', body: {} };
       sections = [];
       renderSections();
+      setBodyEditorHtml('');
       updatePreviewLink();
       return;
     }
@@ -265,6 +304,7 @@
       document.getElementById('statusSelect').value = article.status;
 
       renderSections();
+      setBodyEditorHtml(body.html || legacyBodyToHtml(body));
       updatePreviewLink();
     } catch (err) {
       document.getElementById('editorError').innerHTML = renderErrorBanner('Could not load article: ' + (err && err.message ? err.message : 'unknown error'));
@@ -372,6 +412,116 @@
     }
   }
 
+  // ---------- Rich text editor ----------
+  let bodyEditor = null;
+
+  function escHtml(t) {
+    return String(t || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Converts an older article (intro + sections as plain text) into editor HTML.
+  function legacyBodyToHtml(body) {
+    const paras = function (text) {
+      return String(text || '').split(/\n\s*\n|\n/).map(function (t) { return t.trim(); })
+        .filter(Boolean).map(function (t) { return '<p>' + escHtml(t) + '</p>'; }).join('');
+    };
+    let html = paras(body.intro);
+    (body.sections || []).forEach(function (sec) {
+      if (sec.heading) html += '<h2>' + escHtml(sec.heading) + '</h2>';
+      html += paras(sec.body);
+    });
+    return html;
+  }
+
+  function initBodyEditor() {
+    if (bodyEditor || typeof Quill === 'undefined') return;
+    const Size = Quill.import('attributors/style/size');
+    Size.whitelist = ['13px', '15px', '16px', '18px', '20px', '24px', '28px', '34px'];
+    Quill.register(Size, true);
+    const Font = Quill.import('attributors/style/font');
+    Font.whitelist = ['Inter', 'Space Grotesk', 'IBM Plex Mono', 'Georgia'];
+    Quill.register(Font, true);
+    Quill.register(Quill.import('attributors/style/align'), true);
+    Quill.register(Quill.import('attributors/style/color'), true);
+    Quill.register(Quill.import('attributors/style/background'), true);
+
+    const palette = ['#ffffff', '#d9d9e6', '#9a9ab0', '#45c9bb', '#0fa898', '#7cb4fa', '#6d4aeb',
+      '#e0287d', '#f5b83d', '#ff6b6b', '#4ade80', '#15024c', '#000000'];
+
+    bodyEditor = new Quill('#artBodyEditor', {
+      theme: 'snow',
+      placeholder: 'Start writing the article…',
+      modules: {
+        toolbar: {
+          container: [
+            [{ header: [2, 3, 4, false] }],
+            [{ font: [false].concat(Font.whitelist) }, { size: [false].concat(Size.whitelist) }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ color: palette }, { background: [false].concat(palette) }],
+            [{ align: [] }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['blockquote', 'link', 'image'],
+            ['clean'],
+          ],
+          handlers: { image: insertBodyImage },
+        },
+      },
+    });
+    bodyEditor.on('text-change', updateWordCount);
+  }
+
+  function countWords() {
+    if (!bodyEditor) return 0;
+    const t = bodyEditor.getText().trim();
+    return t ? t.split(/\s+/).length : 0;
+  }
+  function readTimeFor(words) { return Math.max(1, Math.round(words / 200)) + ' min read'; }
+
+  function updateWordCount() {
+    const el = document.getElementById('artWordCount');
+    if (!el) return;
+    const w = countWords();
+    el.textContent = w ? (w + ' words · about ' + readTimeFor(w) + ' (filled in automatically if "Read time" is empty)') : '';
+  }
+
+  function setBodyEditorHtml(html) {
+    initBodyEditor();
+    if (!bodyEditor) return;
+    bodyEditor.setContents([]);
+    if (html) bodyEditor.clipboard.dangerouslyPasteHTML(0, html);
+    updateWordCount();
+  }
+
+  function getBodyEditorHtml() {
+    if (!bodyEditor) return '';
+    if (bodyEditor.getText().trim() === '' && !bodyEditor.root.querySelector('img')) return '';
+    return bodyEditor.root.innerHTML;
+  }
+
+  // Image button: upload to site-media storage instead of embedding the file in the text.
+  function insertBodyImage() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/png,image/jpeg,image/webp,image/gif';
+    input.onchange = async function () {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { showToast({ type: 'error', message: 'Image must be under 5MB.' }); return; }
+      const path = 'article-images/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+      try {
+        showToast({ type: 'success', message: 'Uploading image…' });
+        const { error } = await adminSupabase.storage.from('site-media').upload(path, file);
+        if (error) throw error;
+        const url = adminSupabase.storage.from('site-media').getPublicUrl(path).data.publicUrl;
+        const range = bodyEditor.getSelection(true);
+        bodyEditor.insertEmbed(range ? range.index : bodyEditor.getLength(), 'image', url, 'user');
+      } catch (err) {
+        showToast({ type: 'error', message: 'Image upload failed: ' + (err && err.message ? err.message : 'unknown error') });
+      }
+    };
+    input.click();
+  }
+
   function updateCardImagePreview() {
     const url = document.getElementById('artCardImageUrl').value.trim();
     const wrap = document.getElementById('cardImagePreviewWrap');
@@ -430,6 +580,9 @@
     btn.disabled = true;
 
     const relatedServiceVal = document.getElementById('artRelatedService').value || null;
+    // Auto read time when left empty
+    const rtInput = document.getElementById('artReadTime');
+    if (!rtInput.value.trim() && countWords() > 0) rtInput.value = readTimeFor(countWords());
     const newStatus = document.getElementById('statusSelect').value;
 
     const payload = {
@@ -447,8 +600,10 @@
       seo_description: document.getElementById('artSeoDesc').value || null,
       status: newStatus,
       body: {
-        intro: document.getElementById('artIntro').value,
-        sections: sections,
+        html: getBodyEditorHtml(),
+        // plain-text copy of the start, kept for search/SEO and older code
+        intro: bodyEditor ? bodyEditor.getText().trim().slice(0, 400) : document.getElementById('artIntro').value,
+        sections: [],
         cta_text: document.getElementById('artCtaText').value,
       },
     };
