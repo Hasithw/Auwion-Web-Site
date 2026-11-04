@@ -395,6 +395,10 @@
     background:linear-gradient(135deg, rgba(226,63,160,0.18), rgba(47,224,196,0.18));
     border:1px solid var(--border);
   }
+  /* FIX: when the hero holds an uploaded image (not an icon), size the box to the
+     image instead of the fixed 220px, so tall images don't overlap the text. */
+  .article-full .hero-img:has(img){height:auto;padding:16px;}
+  .article-full .hero-img img{max-width:100%;height:auto;}
   .article-full .body-copy p{color:var(--text-soft);font-size:16px;line-height:1.8;margin:0 0 20px;}
   .article-full .body-copy h2{font-family:var(--font-display);font-size:22px;margin:36px 0 14px;}
   .inline-cta{
