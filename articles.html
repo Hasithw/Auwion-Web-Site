@@ -253,10 +253,17 @@
     transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
   }
   .news-card:hover{transform:translateY(-4px);border-color:var(--teal);box-shadow:0 16px 34px rgba(15,168,152,0.22);}
-  /* Banner: fixed 20:9 frame (e.g. 320 x 144), image fills it. Best upload size: 1200 x 540. */
-  .news-banner{aspect-ratio:20/9;border-radius:10px;overflow:hidden;background:rgba(15,168,152,0.10);
-    display:flex;align-items:center;justify-content:center;}
-  .news-banner img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .4s ease;}
+  /* Banner: fixed 20:9 frame (e.g. 320 x 144). The WHOLE image is always shown;
+     any spare space is filled with a blurred copy of the same image. */
+  .news-banner{
+    position:relative;aspect-ratio:20/9;border-radius:10px;overflow:hidden;background:rgba(15,168,152,0.10);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .news-banner::before{
+    content:"";position:absolute;inset:-20px;background:var(--banner-bg, none) center/cover no-repeat;
+    filter:blur(18px) brightness(0.8);
+  }
+  .news-banner img{position:relative;width:100%;height:100%;object-fit:contain;display:block;transition:transform .4s ease;}
   .news-card:hover .news-banner img{transform:scale(1.03);}
   .news-meta{display:flex;align-items:center;gap:10px;margin:18px 8px 0;font-size:13px;}
   .news-tag{color:var(--teal-soft);font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;font-size:12px;}
@@ -603,7 +610,7 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/site-cms.js?v=3"></script>
+<script src="assets/site-cms.js?v=4"></script>
 
 </body>
 </html>
