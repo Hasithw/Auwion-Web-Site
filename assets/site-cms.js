@@ -285,7 +285,7 @@
     const summary = article.summary || article.seo_description || '';
     const date = formatCardDate(article.published_at);
     return '<a href="' + escapeHtmlLite(articleHref(article.slug)) + '" class="news-card">' +
-      '<div class="news-banner">' + visual + '</div>' +
+      '<div class="news-banner"' + (img ? ' style="--banner-bg:url(&quot;' + escapeHtmlLite(encodeURI(decodeURI(img))) + '&quot;)"' : '') + '>' + visual + '</div>' +
       '<div class="news-meta">' +
         (article.tag ? '<span class="news-tag">' + escapeHtmlLite(article.tag) + '</span>' : '') +
         (article.tag && date ? '<span class="news-dot">•</span>' : '') +
