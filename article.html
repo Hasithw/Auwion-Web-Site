@@ -441,6 +441,11 @@
   main.article-dark .breadcrumb, main.article-dark .breadcrumb a{color:rgba(255,255,255,0.55);}
   main.article-dark .hero-img{background:rgba(255,255,255,0.04);}
   main.article-dark .inline-cta{background:linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));}
+
+  /* "Need help?" box at the end of each article, with Get in touch button */
+  .inline-cta .cta-actions{display:flex;flex-wrap:wrap;gap:10px;}
+  .inline-cta .btn:empty{display:none;}
+  .inline-cta p{font-size:15px !important;color:var(--text) !important;font-weight:500;}
 </style>
 </head>
 <body data-cms-page="article-generic">
@@ -488,8 +493,11 @@
         <div class="hero-img" style="display:flex;align-items:center;justify-content:center;" id="cms-article-hero"></div>
         <div class="body-copy" id="cms-article-body"></div>
         <div class="inline-cta">
-          <p id="cms-article-cta-text"></p>
+          <p id="cms-article-cta-text">Need help with this in your business?</p>
+          <div class="cta-actions">
           <a href="#" class="btn btn-ghost" id="cms-article-cta-button"></a>
+          <a href="contact.html" class="btn btn-primary">Get in touch →</a>
+        </div>
         </div>
       </div>
     </div>
