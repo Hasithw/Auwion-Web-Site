@@ -106,6 +106,24 @@
       </div>
     </div>
     <div class="ac-field">
+      <label for="artCardImageUrl">Articles page banner (card image on the Articles page, 1200 × 630)</label>
+      <input type="text" id="artCardImageUrl" placeholder="https://… or upload below">
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;">
+        <input type="file" id="artCardImageFile" accept="image/png,image/jpeg,image/webp,image/gif" style="font-size:12px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="uploadCardImage()">Upload</button>
+        <a href="banner-maker.html" target="_blank" class="btn btn-secondary btn-sm">Make a banner ↗</a>
+        <span id="cardImageUploadStatus" style="font-size:12px;color:var(--text-dim);"></span>
+      </div>
+      <div id="cardImagePreviewWrap" style="margin-top:10px;display:none;">
+        <img id="cardImagePreview" style="max-width:280px;border-radius:8px;border:1px solid var(--border);" alt="Banner preview">
+      </div>
+      <p style="font-size:12px;color:var(--text-dim);margin:6px 0 0;">If empty, the hero image is used.</p>
+    </div>
+    <div class="ac-field">
+      <label for="artSummary">Card description (1–2 sentences under the title on the Articles page)</label>
+      <textarea id="artSummary" rows="2" placeholder="e.g. A step-by-step checklist for closing the books in Business Central."></textarea>
+    </div>
+    <div class="ac-field">
       <label for="artRelatedService">Related service (for the inline CTA button)</label>
       <select id="artRelatedService"><option value="">— none —</option></select>
     </div>
@@ -182,6 +200,7 @@
 
     await loadServiceOptions();
     document.getElementById('artHeroImageUrl').addEventListener('input', updateHeroImagePreview);
+    document.getElementById('artCardImageUrl').addEventListener('input', updateCardImagePreview);
 
     const slug = new URLSearchParams(window.location.search).get('slug');
     document.getElementById('saveBtn').addEventListener('click', saveArticle);
@@ -235,6 +254,9 @@
       document.getElementById('artIcon').value = article.hero_icon_key || 'implementation';
       document.getElementById('artHeroImageUrl').value = article.hero_image_url || '';
       updateHeroImagePreview();
+      document.getElementById('artCardImageUrl').value = article.card_image_url || '';
+      updateCardImagePreview();
+      document.getElementById('artSummary').value = article.summary || '';
       document.getElementById('artRelatedService').value = article.related_service_id || '';
       document.getElementById('artIntro').value = body.intro || '';
       document.getElementById('artCtaText').value = body.cta_text || '';
@@ -350,6 +372,51 @@
     }
   }
 
+  function updateCardImagePreview() {
+    const url = document.getElementById('artCardImageUrl').value.trim();
+    const wrap = document.getElementById('cardImagePreviewWrap');
+    const img = document.getElementById('cardImagePreview');
+    if (url) { img.src = url; wrap.style.display = 'block'; }
+    else { wrap.style.display = 'none'; }
+  }
+
+  async function uploadCardImage() {
+    const fileInput = document.getElementById('artCardImageFile');
+    const statusEl = document.getElementById('cardImageUploadStatus');
+    const file = fileInput.files[0];
+    if (!file) { showToast({ type: 'error', message: 'Choose a file first.' }); return; }
+
+    const okTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+    if (okTypes.indexOf(file.type) === -1) { showToast({ type: 'error', message: 'Only PNG, JPEG, WEBP, or GIF images are supported.' }); return; }
+    if (file.size > 5 * 1024 * 1024) { showToast({ type: 'error', message: 'Image must be under 5MB.' }); return; }
+
+    statusEl.textContent = 'Uploading…';
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const path = 'banners/' + Date.now() + '-' + safeName;
+
+    try {
+      const { error: uploadErr } = await adminSupabase.storage.from('site-media').upload(path, file);
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = adminSupabase.storage.from('site-media').getPublicUrl(path);
+      const publicUrl = urlData.publicUrl;
+
+      try {
+        await adminSupabase.from('media').insert({
+          file_name: file.name, storage_path: path, public_url: publicUrl,
+          uploaded_by: currentAdmin ? currentAdmin.id : null,
+        });
+      } catch (mediaErr) { /* non-fatal */ }
+
+      document.getElementById('artCardImageUrl').value = publicUrl;
+      updateCardImagePreview();
+      statusEl.textContent = 'Uploaded ✓ — click Save changes';
+      showToast({ type: 'success', message: 'Banner uploaded. Click Save changes to publish it.' });
+    } catch (err) {
+      showToast({ type: 'error', message: 'Upload failed: ' + (err && err.message ? err.message : 'unknown error') });
+      statusEl.textContent = '';
+    }
+  }
+
   async function saveArticle() {
     const btn = document.getElementById('saveBtn');
     const titleVal = document.getElementById('artTitle').value.trim();
@@ -373,6 +440,8 @@
       byline: document.getElementById('artByline').value,
       hero_icon_key: document.getElementById('artIcon').value,
       hero_image_url: document.getElementById('artHeroImageUrl').value.trim() || null,
+      card_image_url: document.getElementById('artCardImageUrl').value.trim() || null,
+      summary: document.getElementById('artSummary').value.trim() || null,
       related_service_id: relatedServiceVal,
       seo_title: document.getElementById('artSeoTitle').value || null,
       seo_description: document.getElementById('artSeoDesc').value || null,
