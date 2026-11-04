@@ -264,16 +264,50 @@
       '</div></a>';
   }
 
+  // Articles page card (banner + tag • date + title + summary).
+  // Banner = card_image_url ("Articles page banner" in admin), falling
+  // back to the hero image, then the hero icon.
+  function formatCardDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    const day = d.getDate();
+    const sfx = (day % 100 >= 11 && day % 100 <= 13) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[day % 10] || 'th');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[d.getMonth()] + ' ' + day + sfx + ', ' + d.getFullYear();
+  }
+
+  function renderNewsCardHtml(article, index) {
+    const img = article.card_image_url || article.hero_image_url;
+    const visual = img
+      ? '<img src="' + escapeHtmlLite(img) + '" alt="' + escapeHtmlLite(article.title) + '" loading="lazy">'
+      : (article.hero_icon_key ? renderServiceIcon(article.hero_icon_key, 'art-' + index, 56) : '');
+    const summary = article.summary || article.seo_description || '';
+    const date = formatCardDate(article.published_at);
+    return '<a href="' + escapeHtmlLite(articleHref(article.slug)) + '" class="news-card">' +
+      '<div class="news-banner">' + visual + '</div>' +
+      '<div class="news-meta">' +
+        (article.tag ? '<span class="news-tag">' + escapeHtmlLite(article.tag) + '</span>' : '') +
+        (article.tag && date ? '<span class="news-dot">•</span>' : '') +
+        (date ? '<span class="news-date">' + escapeHtmlLite(date) + '</span>' : '') +
+      '</div>' +
+      '<h3 class="news-title">' + escapeHtmlLite(article.title) + '</h3>' +
+      (summary ? '<p class="news-summary">' + escapeHtmlLite(summary) + '</p>' : '') +
+      '</a>';
+  }
+
   // Used on both Home (limit 3, featured) and articles.html (no limit,
   // full grid with working filters).
   async function loadArticleCards(limit) {
     const container = document.getElementById('cms-article-grid');
     if (!container) return;
+    const useNewsCards = container.hasAttribute('data-news-cards');
 
     try {
       let query = cmsClient
         .from('articles')
-        .select('slug, title, tag, read_time, hero_icon_key, hero_image_url')
+        .select('slug, title, tag, read_time, hero_icon_key, hero_image_url' +
+          (useNewsCards ? ', card_image_url, summary, seo_description, published_at' : ''))
         .eq('status', 'published')
         .order('display_order', { ascending: true });
       if (limit) query = query.limit(limit);
@@ -281,7 +315,9 @@
       const { data, error } = await query;
       if (error || !data || data.length === 0) return; // keep built-in cards as-is
 
-      container.innerHTML = data.map(function (a, i) { return renderArticleCardHtml(a, i); }).join('');
+      container.innerHTML = data.map(function (a, i) {
+        return useNewsCards ? renderNewsCardHtml(a, i) : renderArticleCardHtml(a, i);
+      }).join('');
     } catch (e) {
       console.warn('[site-cms] Failed to load article cards:', e && e.message);
     }
