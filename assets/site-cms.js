@@ -323,6 +323,139 @@
     }
   }
 
+  // ---------------------------------------------------------------------
+  // Rich article body (written in the admin's text editor).
+  // The HTML is cleaned before display: only safe tags, links and a few
+  // text styles (colour, size, font, alignment) are kept.
+  // ---------------------------------------------------------------------
+  const RICH_TAGS = ['P','BR','H2','H3','H4','STRONG','B','EM','I','U','S','SPAN','A','UL','OL','LI','BLOCKQUOTE','IMG','SUB','SUP','CODE','PRE'];
+  const RICH_STYLES = ['color','background-color','font-size','font-family','text-align'];
+
+  function sanitizeRichHtml(html) {
+    const doc = new DOMParser().parseFromString('<div>' + html + '</div>', 'text/html');
+    const root = doc.body.firstChild;
+    (function clean(node) {
+      Array.prototype.slice.call(node.children).forEach(function (el) {
+        if (el.classList && el.classList.contains('ql-ui')) { el.remove(); return; }
+        if (RICH_TAGS.indexOf(el.tagName) === -1) {
+          // unknown tag: keep its text, drop the tag
+          clean(el);
+          el.replaceWith.apply(el, Array.prototype.slice.call(el.childNodes));
+          return;
+        }
+        Array.prototype.slice.call(el.attributes).forEach(function (attr) {
+          const name = attr.name.toLowerCase(), val = attr.value;
+          if (name === 'style') {
+            const kept = [];
+            val.split(';').forEach(function (decl) {
+              const i = decl.indexOf(':'); if (i < 0) return;
+              const prop = decl.slice(0, i).trim().toLowerCase(), v = decl.slice(i + 1).trim();
+              if (RICH_STYLES.indexOf(prop) !== -1 && !/url\(|expression|javascript/i.test(v)) kept.push(prop + ':' + v);
+            });
+            if (kept.length) el.setAttribute('style', kept.join(';')); else el.removeAttribute('style');
+          } else if (name === 'href' && el.tagName === 'A') {
+            if (!/^(https?:|mailto:|tel:|\/|#|[a-z0-9-]+\.html)/i.test(val)) el.removeAttribute('href');
+          } else if (name === 'src' && el.tagName === 'IMG') {
+            if (!/^https:\/\//i.test(val)) el.remove();
+          } else if (!(name === 'alt' && el.tagName === 'IMG') && name !== 'data-list') {
+            el.removeAttribute(attr.name);
+          }
+        });
+        if (el.tagName === 'A' && /^https?:/i.test(el.getAttribute('href') || '')) {
+          el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener');
+        }
+        if (el.tagName === 'IMG') el.setAttribute('loading', 'lazy');
+        clean(el);
+      });
+    })(root);
+    return root.innerHTML;
+  }
+
+  function injectRichArticleStyles() {
+    if (document.getElementById('rich-article-css')) return;
+    const css = `
+      .body-copy.rich h2{font-family:var(--font-display);font-size:26px;line-height:1.25;margin:40px 0 14px;scroll-margin-top:90px;}
+      .body-copy.rich h3{font-family:var(--font-display);font-size:20px;margin:28px 0 10px;scroll-margin-top:90px;}
+      .body-copy.rich h4{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-soft);margin:24px 0 8px;}
+      .body-copy.rich p{color:var(--text-soft);font-size:16px;line-height:1.8;margin:0 0 18px;}
+      .body-copy.rich p:empty, .body-copy.rich p:has(> br:only-child){margin:0 0 6px;}
+      .body-copy.rich ol, .body-copy.rich ul{color:var(--text-soft);font-size:16px;line-height:1.8;margin:0 0 20px;padding-left:24px;}
+      .body-copy.rich li{margin:0 0 6px;}
+      .body-copy.rich li[data-list="bullet"]{list-style-type:disc;}
+      .body-copy.rich li[data-list="ordered"]{list-style-type:decimal;}
+      .body-copy.rich li::marker{color:var(--teal-soft);}
+      .body-copy.rich blockquote{margin:26px 0;padding:18px 22px;border-left:3px solid var(--teal);border-radius:0 12px 12px 0;
+        background:rgba(15,168,152,0.10);color:var(--text);font-size:16px;line-height:1.7;}
+      .body-copy.rich a{color:var(--teal-soft);text-decoration:underline;text-underline-offset:3px;}
+      .body-copy.rich img{max-width:100%;height:auto;border-radius:12px;margin:10px auto 22px;display:block;}
+      .body-copy.rich pre, .body-copy.rich code{font-family:var(--font-mono);font-size:14px;}
+      .article-toc{margin:0 0 34px;padding:18px 22px;border:1px solid var(--border);border-radius:14px;
+        background:linear-gradient(165deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));}
+      .article-toc-title{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin:0 0 10px;}
+      .article-toc ol{margin:0;padding-left:20px;columns:2 220px;column-gap:28px;}
+      .article-toc li{margin:0 0 6px;font-size:14px;break-inside:avoid;}
+      .article-toc li::marker{color:var(--teal-soft);}
+      .article-toc a{color:var(--text-soft) !important;text-decoration:none !important;}
+      .article-toc a:hover{color:var(--teal-soft) !important;}
+      .read-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:999;
+        background:linear-gradient(90deg, var(--teal), #6D4AEB);transition:width .1s linear;}
+    `;
+    const tag = document.createElement('style');
+    tag.id = 'rich-article-css';
+    tag.textContent = css;
+    document.head.appendChild(tag);
+  }
+
+  // "On this page" list built from the article's subtitles (shown when there are 3+).
+  function buildArticleToc(bodyContainer) {
+    const heads = bodyContainer.querySelectorAll('h2');
+    if (heads.length < 3) return;
+    const used = {};
+    const items = Array.prototype.map.call(heads, function (h) {
+      let id = (h.textContent || 'section').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'section';
+      while (used[id]) id += '-x';
+      used[id] = true;
+      h.id = id;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      return li;
+    });
+    const box = document.createElement('nav');
+    box.className = 'article-toc';
+    box.setAttribute('aria-label', 'On this page');
+    const title = document.createElement('p');
+    title.className = 'article-toc-title';
+    title.textContent = 'On this page';
+    const ol = document.createElement('ol');
+    items.forEach(function (li) { ol.appendChild(li); });
+    // Subtitles already numbered ("1. Cut-off")? Don't add a second number.
+    if (Array.prototype.every.call(heads, function (h) { return /^\s*\d/.test(h.textContent); })) {
+      ol.style.listStyle = 'none'; ol.style.paddingLeft = '0';
+    }
+    box.appendChild(title);
+    box.appendChild(ol);
+    bodyContainer.parentNode.insertBefore(box, bodyContainer);
+  }
+
+  function startReadProgress(articleEl) {
+    if (document.querySelector('.read-progress')) return;
+    const bar = document.createElement('div');
+    bar.className = 'read-progress';
+    document.body.appendChild(bar);
+    function update() {
+      const r = articleEl.getBoundingClientRect();
+      const total = r.height - window.innerHeight;
+      const done = Math.min(Math.max(-r.top, 0), Math.max(total, 1));
+      bar.style.width = (total > 0 ? (done / total) * 100 : 100) + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
   // Renders a single article's full content into one of the 3 real
   // article pages. Safe rendering: every field uses textContent, except
   // the sections list which is rebuilt with createElement/textContent
@@ -369,7 +502,13 @@
 
       const body = article.body || {};
       const bodyContainer = document.getElementById('cms-article-body');
-      if (bodyContainer && body.intro) {
+      if (bodyContainer && body.html) {
+        injectRichArticleStyles();
+        bodyContainer.classList.add('rich');
+        bodyContainer.innerHTML = sanitizeRichHtml(body.html);
+        buildArticleToc(bodyContainer);
+        startReadProgress(marker);
+      } else if (bodyContainer && body.intro) {
         const introP = document.createElement('p');
         introP.textContent = body.intro;
         bodyContainer.innerHTML = '';
